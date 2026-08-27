@@ -1,36 +1,39 @@
 from django.contrib import admin
-from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
 
-from .models import Address, OTP, Profile, User
-
-
-@admin.register(User)
-class UserAdmin(BaseUserAdmin):
-    list_display = ["email", "username", "phone_number", "account_type", "is_email_verified", "is_active", "date_joined"]
-    list_filter = ["account_type", "is_active", "is_email_verified", "is_phone_verified"]
-    search_fields = ["email", "username", "phone_number"]
-    ordering = ["-date_joined"]
-    fieldsets = BaseUserAdmin.fieldsets + (
-        ("Bayzid", {"fields": ("account_type", "phone_number", "is_email_verified", "is_phone_verified")}),
-    )
+from .models import Wallet, WalletTransaction, Withdrawal
 
 
-@admin.register(Profile)
-class ProfileAdmin(admin.ModelAdmin):
-    list_display = ["user", "gender", "date_of_birth"]
+@admin.register(Wallet)
+class WalletAdmin(admin.ModelAdmin):
+    list_display = ["user", "balance", "updated_at"]
     search_fields = ["user__email"]
 
 
-@admin.register(Address)
-class AddressAdmin(admin.ModelAdmin):
-    list_display = ["user", "label", "city", "is_default"]
-    list_filter = ["city", "is_default"]
-    search_fields = ["user__email", "recipient_name"]
+@admin.register(WalletTransaction)
+class WalletTransactionAdmin(admin.ModelAdmin):
+    list_display = ["wallet", "amount", "type", "status", "created_at"]
+    list_filter = ["type", "status"]
+    readonly_fields = ["id", "created_at"]
 
 
-@admin.register(OTP)
-class OTPAdmin(admin.ModelAdmin):
-    list_display = ["user", "purpose", "channel", "is_used", "created_at", "expires_at"]
-    list_filter = ["purpose", "channel", "is_used"]
-    readonly_fields = ["code", "created_at"]
+@admin.register(Withdrawal)
+class WithdrawalAdmin(admin.ModelAdmin):
+    list_display = ["user", "amount", "method", "status", "created_at", "processed_at"]
+    list_filter = ["status", "method"]
     search_fields = ["user__email"]
+    actions = ["mark_completed", "mark_rejected"]
+
+    @admin.action(description="Mark selected withdrawals as completed")
+    def mark_completed(self, request, queryset):
+        from django.utils import timezone
+        queryset.update(status="completed", processed_at=timezone.now())
+
+    @admin.action(description="Mark selected withdrawals as rejected (refunds wallet)")
+    def mark_rejected(self, request, queryset):
+        from django.utils import timezone
+        from .models import credit_wallet
+        for w in queryset.filter(status="pending"):
+            credit_wallet(w.user, w.amount, "refund", description="Withdrawal rejected", reference_id=str(w.id))
+            w.status = "rejected"
+            w.processed_at = timezone.now()
+            w.save(update_fields=["status", "processed_at"])

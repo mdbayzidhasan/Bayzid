@@ -1,130 +1,81 @@
-import random
-import uuid
-from datetime import timedelta
-
 from django.conf import settings
-from django.contrib.auth.models import AbstractUser
 from django.db import models
-from django.utils import timezone
+
+from core.models import BaseModel
 
 
-class User(AbstractUser):
-    """
-    Custom user. Email is the primary login identifier; phone is optional
-    but required for SMS-based OTP flows.
-    """
-
-    class AccountType(models.TextChoices):
-        BUYER = "buyer", "Buyer"
-        SELLER = "seller", "Seller"
-        AFFILIATE = "affiliate", "Affiliate"
-        ADMIN = "admin", "Admin"
-
-    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-    email = models.EmailField(unique=True)
-    phone_number = models.CharField(max_length=20, unique=True, null=True, blank=True)
-    account_type = models.CharField(
-        max_length=20, choices=AccountType.choices, default=AccountType.BUYER
-    )
-    is_email_verified = models.BooleanField(default=False)
-    is_phone_verified = models.BooleanField(default=False)
-
-    USERNAME_FIELD = "email"
-    REQUIRED_FIELDS = ["username"]
-
-    class Meta:
-        indexes = [
-            models.Index(fields=["email"]),
-            models.Index(fields=["phone_number"]),
-        ]
+class Wallet(BaseModel):
+    user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="wallet")
+    balance = models.DecimalField(max_digits=14, decimal_places=2, default=0)
 
     def __str__(self):
-        return self.email
+        return f"Wallet<{self.user.email}: {self.balance}>"
 
 
-class Profile(models.Model):
-    user = models.OneToOneField(
-        settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="profile"
+class WalletTransaction(BaseModel):
+    class Type(models.TextChoices):
+        CREDIT = "credit", "Credit"
+        DEBIT = "debit", "Debit"
+        WITHDRAWAL = "withdrawal", "Withdrawal"
+        REFUND = "refund", "Refund"
+        COMMISSION = "commission", "Commission"
+
+    class Status(models.TextChoices):
+        PENDING = "pending", "Pending"
+        COMPLETED = "completed", "Completed"
+        FAILED = "failed", "Failed"
+
+    wallet = models.ForeignKey(Wallet, on_delete=models.CASCADE, related_name="transactions")
+    amount = models.DecimalField(max_digits=14, decimal_places=2)
+    type = models.CharField(max_length=20, choices=Type.choices)
+    status = models.CharField(max_length=20, choices=Status.choices, default=Status.COMPLETED)
+    description = models.CharField(max_length=255, blank=True)
+    reference_id = models.CharField(max_length=100, blank=True)  # e.g. order number, withdrawal id
+
+    class Meta(BaseModel.Meta):
+        indexes = [models.Index(fields=["wallet", "type"])]
+
+
+class Withdrawal(BaseModel):
+    class Method(models.TextChoices):
+        BKASH = "bkash", "bKash"
+        NAGAD = "nagad", "Nagad"
+        BANK = "bank", "Bank Transfer"
+
+    class Status(models.TextChoices):
+        PENDING = "pending", "Pending"
+        APPROVED = "approved", "Approved"
+        PROCESSING = "processing", "Processing"
+        COMPLETED = "completed", "Completed"
+        REJECTED = "rejected", "Rejected"
+
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="withdrawals")
+    amount = models.DecimalField(max_digits=14, decimal_places=2)
+    method = models.CharField(max_length=20, choices=Method.choices)
+    account_info = models.CharField(max_length=255)  # e.g. bKash number, bank account
+    status = models.CharField(max_length=20, choices=Status.choices, default=Status.PENDING)
+    admin_note = models.CharField(max_length=255, blank=True)
+    processed_at = models.DateTimeField(null=True, blank=True)
+
+
+def credit_wallet(user, amount, tx_type, description="", reference_id=""):
+    """Single, safe entry point for adding money to a user's wallet."""
+    wallet, _ = Wallet.objects.get_or_create(user=user)
+    wallet.balance = wallet.balance + amount
+    wallet.save(update_fields=["balance"])
+    return WalletTransaction.objects.create(
+        wallet=wallet, amount=amount, type=tx_type,
+        description=description, reference_id=reference_id,
     )
-    avatar = models.ImageField(upload_to="avatars/", null=True, blank=True)
-    date_of_birth = models.DateField(null=True, blank=True)
-    gender = models.CharField(max_length=20, blank=True)
-    bio = models.TextField(blank=True)
-    created_at = models.DateTimeField(auto_now_add=True)
-    updated_at = models.DateTimeField(auto_now=True)
-
-    def __str__(self):
-        return f"Profile<{self.user.email}>"
 
 
-class Address(models.Model):
-    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-    user = models.ForeignKey(
-        settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="addresses"
+def debit_wallet(user, amount, tx_type, description="", reference_id=""):
+    wallet, _ = Wallet.objects.get_or_create(user=user)
+    if wallet.balance < amount:
+        raise ValueError("Insufficient wallet balance.")
+    wallet.balance = wallet.balance - amount
+    wallet.save(update_fields=["balance"])
+    return WalletTransaction.objects.create(
+        wallet=wallet, amount=amount, type=tx_type,
+        description=description, reference_id=reference_id,
     )
-    label = models.CharField(max_length=50, default="Home")
-    recipient_name = models.CharField(max_length=150)
-    phone_number = models.CharField(max_length=20)
-    address_line1 = models.CharField(max_length=255)
-    address_line2 = models.CharField(max_length=255, blank=True)
-    city = models.CharField(max_length=100)
-    district = models.CharField(max_length=100, blank=True)
-    postal_code = models.CharField(max_length=20, blank=True)
-    country = models.CharField(max_length=100, default="Bangladesh")
-    is_default = models.BooleanField(default=False)
-    created_at = models.DateTimeField(auto_now_add=True)
-
-    class Meta:
-        indexes = [models.Index(fields=["user"])]
-
-    def __str__(self):
-        return f"{self.recipient_name} — {self.city}"
-
-
-class OTP(models.Model):
-    """
-    Backend-agnostic OTP record. The actual delivery channel (email/SMS)
-    is decided by `channel`; sending is handled in accounts/services.py so
-    real credentials never touch models or views.
-    """
-
-    class Purpose(models.TextChoices):
-        REGISTRATION = "registration", "Registration"
-        PASSWORD_RESET = "password_reset", "Password Reset"
-        LOGIN = "login", "Login"
-
-    class Channel(models.TextChoices):
-        EMAIL = "email", "Email"
-        SMS = "sms", "SMS"
-
-    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-    user = models.ForeignKey(
-        settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="otps"
-    )
-    code = models.CharField(max_length=6)
-    purpose = models.CharField(max_length=20, choices=Purpose.choices)
-    channel = models.CharField(max_length=10, choices=Channel.choices, default=Channel.EMAIL)
-    is_used = models.BooleanField(default=False)
-    attempts = models.PositiveSmallIntegerField(default=0)
-    created_at = models.DateTimeField(auto_now_add=True)
-    expires_at = models.DateTimeField()
-
-    class Meta:
-        indexes = [models.Index(fields=["user", "purpose", "is_used"])]
-
-    @classmethod
-    def generate(cls, user, purpose, channel=Channel.EMAIL, expiry_minutes=5):
-        code = "".join(random.choices("0123456789", k=6))
-        return cls.objects.create(
-            user=user,
-            code=code,
-            purpose=purpose,
-            channel=channel,
-            expires_at=timezone.now() + timedelta(minutes=expiry_minutes),
-        )
-
-    def is_valid(self):
-        return not self.is_used and self.expires_at > timezone.now() and self.attempts < 5
-
-    def __str__(self):
-        return f"OTP<{self.user.email}:{self.purpose}>"
