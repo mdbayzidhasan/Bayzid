@@ -1,27 +1,26 @@
 from rest_framework import serializers
 
-from .models import Wallet, WalletTransaction, Withdrawal
+from orders.models import OrderItem
+from .models import Review
 
 
-class WalletSerializer(serializers.ModelSerializer):
+class ReviewSerializer(serializers.ModelSerializer):
+    user_name = serializers.CharField(source="user.username", read_only=True)
+
     class Meta:
-        model = Wallet
-        fields = ["id", "balance"]
+        model = Review
+        fields = ["id", "product", "user_name", "order_item", "rating", "comment", "image", "created_at"]
+        read_only_fields = ["id", "user_name", "created_at"]
 
+    def validate_order_item(self, order_item):
+        request = self.context["request"]
+        if order_item.order.buyer != request.user:
+            raise serializers.ValidationError("You can only review items you purchased.")
+        if order_item.status != OrderItem._meta.get_field("status").default and order_item.status != "delivered":
+            raise serializers.ValidationError("You can review a product only after it has been delivered.")
+        return order_item
 
-class WalletTransactionSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = WalletTransaction
-        fields = ["id", "amount", "type", "status", "description", "reference_id", "created_at"]
-
-
-class WithdrawalSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Withdrawal
-        fields = ["id", "amount", "method", "account_info", "status", "created_at"]
-        read_only_fields = ["id", "status", "created_at"]
-
-    def validate_amount(self, value):
-        if value <= 0:
-            raise serializers.ValidationError("Amount must be greater than zero.")
-        return value
+    def create(self, validated_data):
+        validated_data["user"] = self.context["request"].user
+        validated_data["product"] = validated_data["order_item"].product
+        return super().create(validated_data)

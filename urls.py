@@ -1,12 +1,8 @@
-from django.urls import path
 from rest_framework.routers import DefaultRouter
 
-from .views import MyWalletView, WalletTransactionListView, WithdrawalViewSet
+from .views import ReviewViewSet
 
 router = DefaultRouter()
-router.register("withdrawals", WithdrawalViewSet, basename="withdrawal")
+router.register("", ReviewViewSet, basename="review")
 
-urlpatterns = [
-    path("me/", MyWalletView.as_view(), name="wallet-me"),
-    path("transactions/", WalletTransactionListView.as_view(), name="wallet-transactions"),
-] + router.urls
+urlpatterns = router.urls
