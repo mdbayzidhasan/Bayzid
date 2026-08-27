@@ -1,583 +1,295 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-    <title>Bayzid - Shop, Sell & Earn</title>
-
-    <!-- Main CSS -->
-    <link rel="stylesheet" href="style.css">
-
-    <!-- Google Font -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link
-        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
-        rel="stylesheet"
-    >
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Bayzid — Shop • Sell • Earn</title>
+<meta name="description" content="Bayzid is Bangladesh's marketplace to buy products, sell products, and earn through affiliate marketing." />
+<meta property="og:title" content="Bayzid — Shop • Sell • Earn" />
+<meta property="og:description" content="Buy, sell, and earn on Bayzid — Bangladesh's all-in-one marketplace." />
+<link rel="icon" href="assets/logos/bayzid-logo-icon.png" />
+<script src="https://cdn.tailwindcss.com"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Manrope:wght@700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css" />
 </head>
+<body class="min-h-screen text-slate-900">
 
-<body>
+<div id="toast-container" class="fixed top-4 right-4 z-50 flex flex-col gap-2 items-end"></div>
 
-    <!-- ================= HEADER ================= -->
-    <header class="header">
-        <div class="container header-wrapper">
+<!-- ============ HEADER ============ -->
+<header class="sticky top-0 z-40 bg-white/90 backdrop-blur border-b border-slate-100">
+  <!-- Desktop -->
+  <div class="hidden lg:flex items-center gap-6 max-w-7xl mx-auto px-6 py-3">
+    <a href="index.html" class="flex items-center gap-2 shrink-0">
+      <img src="assets/logos/bayzid-logo-icon.png" class="h-9 w-9 rounded-lg" alt="Bayzid" />
+      <span class="font-display font-extrabold text-lg">Bayzid</span>
+    </a>
 
-            <!-- Logo -->
-            <a href="index.html" class="logo">
-                <span class="logo-icon">B</span>
-                <span class="logo-text">Bayzid</span>
-            </a>
+    <div class="flex-1 relative max-w-xl">
+      <input type="search" placeholder="Search for products, brands, categories…"
+        class="input-field w-full rounded-full border border-slate-200 pl-11 pr-4 py-2.5 text-sm" />
+      <span class="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400">🔍</span>
+    </div>
 
-            <!-- Search -->
-            <div class="search-box">
-                <input
-                    type="text"
-                    id="searchInput"
-                    placeholder="Search for products..."
-                >
-                <button type="button" onclick="searchProducts()">
-                    🔍
-                </button>
-            </div>
+    <nav class="flex items-center gap-5 text-sm font-medium text-slate-600">
+      <a href="products.html" class="hover:text-[#1E3A8A]">Categories</a>
+      <a href="seller-dashboard.html" class="hover:text-[#1E3A8A]">Become a Seller</a>
+      <a href="#affiliate" class="hover:text-[#1E3A8A]">Affiliate</a>
+    </nav>
 
-            <!-- Navigation -->
-            <nav class="navigation">
-                <a href="index.html">Home</a>
-                <a href="products.html">Products</a>
-                <a href="seller.html">Sell</a>
-                <a href="affiliate.html">Earn</a>
-            </nav>
+    <div class="flex items-center gap-4 shrink-0">
+      <a href="cart.html" class="relative text-xl" aria-label="Cart">
+        🛒<span class="absolute -top-1.5 -right-2 bg-orange-500 text-white text-[10px] rounded-full w-4 h-4 flex items-center justify-center" id="cart-count">0</span>
+      </a>
+      <a href="login.html" class="text-sm font-medium text-slate-600 hover:text-[#1E3A8A]">Login</a>
+      <a href="register.html" class="btn-accent text-white text-sm font-semibold px-4 py-2 rounded-full">Register</a>
+    </div>
+  </div>
 
-            <!-- User Actions -->
-            <div class="header-actions">
-                <a href="cart.html" class="cart-button">
-                    🛒
-                    <span id="cartCount">0</span>
-                </a>
+  <!-- Mobile -->
+  <div class="lg:hidden flex items-center justify-between px-4 py-3">
+    <button id="mobile-menu-btn" class="text-2xl" aria-label="Menu">☰</button>
+    <a href="index.html"><img src="assets/logos/bayzid-logo-icon.png" class="h-9 w-9 rounded-lg" alt="Bayzid" /></a>
+    <div class="flex items-center gap-4">
+      <button class="text-xl" aria-label="Search">🔍</button>
+      <a href="cart.html" class="relative text-xl" aria-label="Cart">🛒<span class="absolute -top-1.5 -right-2 bg-orange-500 text-white text-[10px] rounded-full w-4 h-4 flex items-center justify-center">0</span></a>
+    </div>
+  </div>
+  <div id="mobile-menu" class="hidden lg:hidden border-t border-slate-100 px-4 py-3 space-y-3 text-sm font-medium">
+    <a href="products.html" class="block">Categories</a>
+    <a href="seller-dashboard.html" class="block">Become a Seller</a>
+    <a href="#affiliate" class="block">Affiliate</a>
+    <a href="login.html" class="block">Login</a>
+    <a href="register.html" class="block text-[#1E3A8A] font-semibold">Register</a>
+  </div>
+</header>
 
-                <a href="login.html" class="login-button">
-                    Login
-                </a>
-
-                <a href="register.html" class="register-button">
-                    Register
-                </a>
-            </div>
-
+<!-- ============ HERO ============ -->
+<section class="bayzid-gradient relative overflow-hidden">
+  <div class="max-w-7xl mx-auto px-6 py-16 sm:py-24 grid lg:grid-cols-2 gap-10 items-center relative z-10">
+    <div class="text-white">
+      <p class="uppercase tracking-[0.25em] text-xs text-orange-300 font-semibold mb-4">Shop • Sell • Earn</p>
+      <h1 class="font-display text-4xl sm:text-5xl font-extrabold leading-tight mb-5">Everything you need. Everyone you can sell to.</h1>
+      <p class="text-blue-100/80 text-lg mb-8 max-w-lg">Bayzid brings buyers, sellers, and affiliates together in one trusted marketplace built for Bangladesh.</p>
+      <div class="flex flex-wrap gap-3">
+        <a href="products.html" class="btn-accent text-white font-semibold px-6 py-3 rounded-full shadow-lg">Shop Now</a>
+        <a href="seller-dashboard.html" class="bg-white/10 border border-white/30 text-white font-semibold px-6 py-3 rounded-full hover:bg-white/20 transition">Become a Seller</a>
+        <a href="#affiliate" class="bg-white/10 border border-white/30 text-white font-semibold px-6 py-3 rounded-full hover:bg-white/20 transition">Join as Affiliate</a>
+      </div>
+    </div>
+    <div class="relative hidden lg:block">
+      <div class="bg-white rounded-3xl shadow-2xl p-6 rotate-2">
+        <div class="grid grid-cols-2 gap-4">
+          <div class="bg-slate-50 rounded-2xl h-32 flex items-center justify-center text-4xl">📱</div>
+          <div class="bg-slate-50 rounded-2xl h-32 flex items-center justify-center text-4xl">👗</div>
+          <div class="bg-slate-50 rounded-2xl h-32 flex items-center justify-center text-4xl">🏠</div>
+          <div class="bg-slate-50 rounded-2xl h-32 flex items-center justify-center text-4xl">⌚</div>
         </div>
-    </header>
+      </div>
+    </div>
+  </div>
+  <div class="absolute -bottom-32 -left-32 w-96 h-96 rounded-full bg-orange-500/10 blur-3xl"></div>
+</section>
 
+<main class="max-w-7xl mx-auto px-6">
 
-    <!-- ================= HERO SECTION ================= -->
-    <section class="hero">
-        <div class="container hero-wrapper">
+  <!-- ============ CATEGORIES ============ -->
+  <section class="py-14">
+    <h2 class="font-display text-2xl font-extrabold mb-6">Shop by Category</h2>
+    <div id="categories-grid" class="grid grid-cols-3 sm:grid-cols-4 lg:grid-cols-6 gap-4"></div>
+  </section>
 
-            <div class="hero-content">
+  <!-- ============ FLASH SALE ============ -->
+  <section class="py-8">
+    <div class="flex items-center justify-between mb-6">
+      <h2 class="font-display text-2xl font-extrabold flex items-center gap-2">⚡ Flash Sale</h2>
+      <span id="flash-sale-timer" class="text-sm font-semibold text-orange-600 bg-orange-50 px-3 py-1.5 rounded-full"></span>
+    </div>
+    <div id="flash-sale-grid" class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-5"></div>
+  </section>
 
-                <span class="hero-badge">
-                    🚀 Bangladesh's New Marketplace
-                </span>
+  <!-- ============ FEATURED PRODUCTS ============ -->
+  <section class="py-8">
+    <h2 class="font-display text-2xl font-extrabold mb-6">Featured Products</h2>
+    <div id="featured-grid" class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-5"></div>
+  </section>
 
-                <h1>
-                    Shop, Sell & <span>Earn</span>
-                    With Bayzid
-                </h1>
+  <!-- ============ TRENDING ============ -->
+  <section class="py-8">
+    <h2 class="font-display text-2xl font-extrabold mb-6">Trending Now</h2>
+    <div id="trending-grid" class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-5"></div>
+  </section>
 
-                <p>
-                    Discover amazing products, start selling online,
-                    and earn money with our affiliate program.
-                </p>
+  <!-- ============ TOP SELLERS ============ -->
+  <section class="py-8">
+    <h2 class="font-display text-2xl font-extrabold mb-6">Top Sellers</h2>
+    <div id="top-sellers-grid" class="grid grid-cols-2 sm:grid-cols-4 gap-5"></div>
+  </section>
 
-                <div class="hero-buttons">
-                    <a href="products.html" class="primary-button">
-                        Shop Now
-                    </a>
+  <!-- ============ AFFILIATE CTA ============ -->
+  <section id="affiliate" class="py-14">
+    <div class="bayzid-gradient rounded-3xl p-10 sm:p-14 text-white grid lg:grid-cols-2 gap-8 items-center">
+      <div>
+        <p class="uppercase tracking-[0.2em] text-xs text-orange-300 font-semibold mb-4">Bayzid Affiliate</p>
+        <h2 class="font-display text-3xl font-extrabold mb-4">Turn every share into commission.</h2>
+        <p class="text-blue-100/80 mb-6 max-w-md">Generate your own product links, track clicks and conversions in real time, and get paid straight to your Bayzid wallet.</p>
+        <a href="register.html" class="btn-accent inline-block text-white font-semibold px-6 py-3 rounded-full">Become an Affiliate</a>
+      </div>
+      <div class="grid grid-cols-2 gap-4">
+        <div class="bg-white/10 rounded-2xl p-5"><p class="text-3xl font-extrabold">5%+</p><p class="text-sm text-blue-100/70">Avg. Commission</p></div>
+        <div class="bg-white/10 rounded-2xl p-5"><p class="text-3xl font-extrabold">24/7</p><p class="text-sm text-blue-100/70">Click Tracking</p></div>
+        <div class="bg-white/10 rounded-2xl p-5"><p class="text-3xl font-extrabold">Fast</p><p class="text-sm text-blue-100/70">Wallet Payouts</p></div>
+        <div class="bg-white/10 rounded-2xl p-5"><p class="text-3xl font-extrabold">0৳</p><p class="text-sm text-blue-100/70">To Get Started</p></div>
+      </div>
+    </div>
+  </section>
 
-                    <a href="seller.html" class="secondary-button">
-                        Start Selling
-                    </a>
-                </div>
+  <!-- ============ NEWSLETTER ============ -->
+  <section class="py-14">
+    <div class="bg-slate-50 rounded-3xl p-8 sm:p-12 text-center">
+      <h2 class="font-display text-2xl font-extrabold mb-2">Get the best deals first</h2>
+      <p class="text-slate-500 mb-6">Subscribe for flash sale alerts and new arrivals.</p>
+      <form id="newsletter-form" class="flex flex-col sm:flex-row gap-3 max-w-md mx-auto">
+        <input type="email" required placeholder="you@example.com" class="input-field flex-1 rounded-full border border-slate-200 px-5 py-3" />
+        <button type="submit" class="btn-primary text-white font-semibold px-6 py-3 rounded-full">Subscribe</button>
+      </form>
+    </div>
+  </section>
+</main>
 
-            </div>
+<!-- ============ FOOTER ============ -->
+<footer class="bg-[#0f2159] text-blue-100/70 mt-10">
+  <div class="max-w-7xl mx-auto px-6 py-12 grid sm:grid-cols-2 lg:grid-cols-4 gap-8">
+    <div>
+      <img src="assets/logos/bayzid-logo-icon.png" class="h-9 w-9 rounded-lg mb-3" alt="Bayzid" />
+      <p class="text-sm">Bangladesh's marketplace to shop, sell, and earn.</p>
+    </div>
+    <div>
+      <h3 class="text-white font-semibold mb-3 text-sm">Shop</h3>
+      <ul class="space-y-2 text-sm">
+        <li><a href="products.html" class="hover:text-white">All Products</a></li>
+        <li><a href="#" class="hover:text-white">Flash Sale</a></li>
+        <li><a href="#" class="hover:text-white">Categories</a></li>
+      </ul>
+    </div>
+    <div>
+      <h3 class="text-white font-semibold mb-3 text-sm">Sell &amp; Earn</h3>
+      <ul class="space-y-2 text-sm">
+        <li><a href="seller-dashboard.html" class="hover:text-white">Become a Seller</a></li>
+        <li><a href="#affiliate" class="hover:text-white">Affiliate Program</a></li>
+      </ul>
+    </div>
+    <div>
+      <h3 class="text-white font-semibold mb-3 text-sm">Support</h3>
+      <ul class="space-y-2 text-sm">
+        <li><a href="#" class="hover:text-white">Help Center</a></li>
+        <li><a href="#" class="hover:text-white">Track Order</a></li>
+        <li><a href="#" class="hover:text-white">Contact Us</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="border-t border-white/10 text-center text-xs py-5">© 2026 Bayzid. All rights reserved.</div>
+</footer>
 
-            <div class="hero-image">
-                <div class="hero-card">
-                    <div class="hero-card-icon">🛍️</div>
-                    <h3>Everything You Need</h3>
-                    <p>Shop thousands of products at great prices.</p>
-                </div>
-            </div>
+<script src="js/api.js"></script>
+<script src="js/ui.js"></script>
+<script>
+document.getElementById("mobile-menu-btn").addEventListener("click", () => {
+  document.getElementById("mobile-menu").classList.toggle("hidden");
+});
 
+const DEMO_CATEGORIES = [
+  { name: "Fashion", icon: "👗" }, { name: "Electronics", icon: "📱" },
+  { name: "Home & Kitchen", icon: "🏠" }, { name: "Beauty", icon: "💄" },
+  { name: "Groceries", icon: "🛒" }, { name: "Sports", icon: "🏸" },
+];
+
+const DEMO_PRODUCTS = (prefix, count) => Array.from({ length: count }, (_, i) => ({
+  name: `${prefix} Product ${i + 1}`,
+  price: (500 + i * 150).toFixed(0),
+  discount: [0, 10, 15, 20][i % 4],
+  rating: (4 + (i % 5) * 0.2).toFixed(1),
+}));
+
+function renderCategories() {
+  const grid = document.getElementById("categories-grid");
+  grid.innerHTML = DEMO_CATEGORIES.map(c => `
+    <a href="products.html" class="bg-white border border-slate-100 rounded-2xl p-4 text-center hover:shadow-md hover:-translate-y-0.5 transition">
+      <div class="text-3xl mb-2">${c.icon}</div>
+      <p class="text-xs font-medium text-slate-600">${c.name}</p>
+    </a>`).join("");
+}
+
+function productCard(p) {
+  const finalPrice = p.discount ? (p.price * (1 - p.discount / 100)).toFixed(0) : p.price;
+  return `
+    <div class="bg-white border border-slate-100 rounded-2xl overflow-hidden hover:shadow-lg transition group">
+      <div class="relative h-32 sm:h-36 bg-slate-50 flex items-center justify-center text-4xl">📦
+        ${p.discount ? `<span class="absolute top-2 left-2 bg-orange-500 text-white text-[10px] font-bold px-2 py-0.5 rounded-full">-${p.discount}%</span>` : ""}
+        <button class="absolute top-2 right-2 bg-white/90 rounded-full w-7 h-7 flex items-center justify-center text-sm opacity-0 group-hover:opacity-100 transition" aria-label="Wishlist">🤍</button>
+      </div>
+      <div class="p-3">
+        <p class="text-sm font-medium text-slate-800 truncate">${p.name}</p>
+        <div class="flex items-center gap-1 text-xs text-amber-500 mt-1">★ ${p.rating}</div>
+        <div class="flex items-center gap-2 mt-1">
+          <span class="font-bold text-slate-900">৳${finalPrice}</span>
+          ${p.discount ? `<span class="text-xs text-slate-400 line-through">৳${p.price}</span>` : ""}
         </div>
-    </section>
-
-
-    <!-- ================= CATEGORIES ================= -->
-    <section class="categories-section">
-        <div class="container">
-
-            <div class="section-header">
-                <h2>Popular Categories</h2>
-                <a href="categories.html">View All →</a>
-            </div>
-
-            <div class="categories-grid">
-
-                <a href="products.html?category=electronics" class="category-card">
-                    <div class="category-icon">📱</div>
-                    <h3>Electronics</h3>
-                    <p>120+ Products</p>
-                </a>
-
-                <a href="products.html?category=fashion" class="category-card">
-                    <div class="category-icon">👕</div>
-                    <h3>Fashion</h3>
-                    <p>250+ Products</p>
-                </a>
-
-                <a href="products.html?category=watch" class="category-card">
-                    <div class="category-icon">⌚</div>
-                    <h3>Watches</h3>
-                    <p>80+ Products</p>
-                </a>
-
-                <a href="products.html?category=home" class="category-card">
-                    <div class="category-icon">🏠</div>
-                    <h3>Home & Kitchen</h3>
-                    <p>180+ Products</p>
-                </a>
-
-                <a href="products.html?category=beauty" class="category-card">
-                    <div class="category-icon">💄</div>
-                    <h3>Beauty</h3>
-                    <p>100+ Products</p>
-                </a>
-
-                <a href="products.html?category=sports" class="category-card">
-                    <div class="category-icon">⚽</div>
-                    <h3>Sports</h3>
-                    <p>70+ Products</p>
-                </a>
-
-            </div>
-
-        </div>
-    </section>
-
-
-    <!-- ================= FEATURED PRODUCTS ================= -->
-    <section class="products-section">
-        <div class="container">
-
-            <div class="section-header">
-                <div>
-                    <span class="section-label">TRENDING NOW</span>
-                    <h2>Featured Products</h2>
-                </div>
-
-                <a href="products.html">View All →</a>
-            </div>
-
-            <div class="products-grid" id="productGrid">
-
-                <!-- Product 01 -->
-                <div class="product-card">
-
-                    <div class="product-image">
-                        <span class="discount-badge">-20%</span>
-                        <img
-                            src="assets/images/product-1.jpg"
-                            alt="Smart Watch"
-                        >
-                    </div>
-
-                    <div class="product-info">
-
-                        <span class="product-category">
-                            Electronics
-                        </span>
-
-                        <h3>Premium Smart Watch</h3>
-
-                        <div class="rating">
-                            ⭐⭐⭐⭐⭐
-                            <span>(24)</span>
-                        </div>
-
-                        <div class="price">
-                            <strong>৳1,499</strong>
-                            <del>৳1,899</del>
-                        </div>
-
-                        <button
-                            class="add-cart-button"
-                            onclick="addToCart('Premium Smart Watch', 1499)"
-                        >
-                            Add to Cart
-                        </button>
-
-                    </div>
-                </div>
-
-
-                <!-- Product 02 -->
-                <div class="product-card">
-
-                    <div class="product-image">
-                        <span class="discount-badge">-15%</span>
-                        <img
-                            src="assets/images/product-2.jpg"
-                            alt="Wireless Earbuds"
-                        >
-                    </div>
-
-                    <div class="product-info">
-
-                        <span class="product-category">
-                            Electronics
-                        </span>
-
-                        <h3>Wireless Bluetooth Earbuds</h3>
-
-                        <div class="rating">
-                            ⭐⭐⭐⭐⭐
-                            <span>(18)</span>
-                        </div>
-
-                        <div class="price">
-                            <strong>৳899</strong>
-                            <del>৳1,050</del>
-                        </div>
-
-                        <button
-                            class="add-cart-button"
-                            onclick="addToCart('Wireless Bluetooth Earbuds', 899)"
-                        >
-                            Add to Cart
-                        </button>
-
-                    </div>
-                </div>
-
-
-                <!-- Product 03 -->
-                <div class="product-card">
-
-                    <div class="product-image">
-                        <span class="discount-badge">-25%</span>
-                        <img
-                            src="assets/images/product-3.jpg"
-                            alt="Men's Watch"
-                        >
-                    </div>
-
-                    <div class="product-info">
-
-                        <span class="product-category">
-                            Watches
-                        </span>
-
-                        <h3>Luxury Men's Watch</h3>
-
-                        <div class="rating">
-                            ⭐⭐⭐⭐☆
-                            <span>(31)</span>
-                        </div>
-
-                        <div class="price">
-                            <strong>৳1,199</strong>
-                            <del>৳1,599</del>
-                        </div>
-
-                        <button
-                            class="add-cart-button"
-                            onclick="addToCart('Luxury Men Watch', 1199)"
-                        >
-                            Add to Cart
-                        </button>
-
-                    </div>
-                </div>
-
-
-                <!-- Product 04 -->
-                <div class="product-card">
-
-                    <div class="product-image">
-                        <span class="discount-badge">-10%</span>
-                        <img
-                            src="assets/images/product-4.jpg"
-                            alt="Kitchen Product"
-                        >
-                    </div>
-
-                    <div class="product-info">
-
-                        <span class="product-category">
-                            Home & Kitchen
-                        </span>
-
-                        <h3>Multi-Purpose Kitchen Tool</h3>
-
-                        <div class="rating">
-                            ⭐⭐⭐⭐⭐
-                            <span>(42)</span>
-                        </div>
-
-                        <div class="price">
-                            <strong>৳499</strong>
-                            <del>৳550</del>
-                        </div>
-
-                        <button
-                            class="add-cart-button"
-                            onclick="addToCart('Multi-Purpose Kitchen Tool', 499)"
-                        >
-                            Add to Cart
-                        </button>
-
-                    </div>
-                </div>
-
-            </div>
-
-        </div>
-    </section>
-
-
-    <!-- ================= SELLER / AFFILIATE BANNER ================= -->
-    <section class="business-section">
-        <div class="container business-grid">
-
-            <div class="business-card seller-card">
-
-                <div class="business-icon">
-                    🏪
-                </div>
-
-                <div>
-                    <span>FOR SELLERS</span>
-
-                    <h2>
-                        Start Your Online Business
-                    </h2>
-
-                    <p>
-                        Create your seller account and start selling
-                        products to customers across Bangladesh.
-                    </p>
-
-                    <a href="seller.html">
-                        Become a Seller →
-                    </a>
-                </div>
-
-            </div>
-
-
-            <div class="business-card affiliate-card">
-
-                <div class="business-icon">
-                    💰
-                </div>
-
-                <div>
-                    <span>FOR AFFILIATES</span>
-
-                    <h2>
-                        Earn Money With Bayzid
-                    </h2>
-
-                    <p>
-                        Share products with your audience and earn
-                        commission from every successful sale.
-                    </p>
-
-                    <a href="affiliate.html">
-                        Join Affiliate Program →
-                    </a>
-                </div>
-
-            </div>
-
-        </div>
-    </section>
-
-
-    <!-- ================= WHY BAYZID ================= -->
-    <section class="why-section">
-        <div class="container">
-
-            <div class="section-header center">
-                <span class="section-label">WHY BAYZID?</span>
-                <h2>Everything in One Place</h2>
-                <p>
-                    A marketplace designed for buyers, sellers,
-                    and affiliates.
-                </p>
-            </div>
-
-
-            <div class="features-grid">
-
-                <div class="feature-card">
-                    <div class="feature-icon">🚚</div>
-                    <h3>Fast Delivery</h3>
-                    <p>
-                        Get your products delivered quickly
-                        across Bangladesh.
-                    </p>
-                </div>
-
-                <div class="feature-card">
-                    <div class="feature-icon">🔒</div>
-                    <h3>Secure Shopping</h3>
-                    <p>
-                        Shop confidently with secure payment
-                        and customer protection.
-                    </p>
-                </div>
-
-                <div class="feature-card">
-                    <div class="feature-icon">💳</div>
-                    <h3>Easy Payment</h3>
-                    <p>
-                        Convenient payment options for
-                        hassle-free shopping.
-                    </p>
-                </div>
-
-                <div class="feature-card">
-                    <div class="feature-icon">💰</div>
-                    <h3>Earn More</h3>
-                    <p>
-                        Sellers and affiliates can build
-                        their own online income.
-                    </p>
-                </div>
-
-            </div>
-
-        </div>
-    </section>
-
-
-    <!-- ================= NEWSLETTER ================= -->
-    <section class="newsletter-section">
-        <div class="container newsletter-wrapper">
-
-            <div>
-                <h2>Get the Latest Deals</h2>
-                <p>
-                    Subscribe to receive new products,
-                    offers and exclusive deals.
-                </p>
-            </div>
-
-            <form
-                class="newsletter-form"
-                onsubmit="subscribeNewsletter(event)"
-            >
-                <input
-                    type="email"
-                    id="newsletterEmail"
-                    placeholder="Enter your email address"
-                    required
-                >
-
-                <button type="submit">
-                    Subscribe
-                </button>
-            </form>
-
-        </div>
-    </section>
-
-
-    <!-- ================= FOOTER ================= -->
-    <footer class="footer">
-
-        <div class="container footer-grid">
-
-            <div class="footer-about">
-
-                <a href="index.html" class="logo footer-logo">
-                    <span class="logo-icon">B</span>
-                    <span class="logo-text">Bayzid</span>
-                </a>
-
-                <p>
-                    Shop, Sell & Earn with Bayzid —
-                    your modern online marketplace.
-                </p>
-
-                <div class="social-links">
-                    <a href="#" aria-label="Facebook">Facebook</a>
-                    <a href="#" aria-label="Instagram">Instagram</a>
-                    <a href="#" aria-label="YouTube">YouTube</a>
-                </div>
-
-            </div>
-
-
-            <div class="footer-column">
-
-                <h3>Marketplace</h3>
-
-                <a href="products.html">All Products</a>
-                <a href="categories.html">Categories</a>
-                <a href="deals.html">Deals</a>
-                <a href="new-arrivals.html">New Arrivals</a>
-
-            </div>
-
-
-            <div class="footer-column">
-
-                <h3>Business</h3>
-
-                <a href="seller.html">Become a Seller</a>
-                <a href="affiliate.html">Affiliate Program</a>
-                <a href="dropshipping.html">Dropshipping</a>
-                <a href="seller-login.html">Seller Login</a>
-
-            </div>
-
-
-            <div class="footer-column">
-
-                <h3>Support</h3>
-
-                <a href="contact.html">Contact Us</a>
-                <a href="help.html">Help Center</a>
-                <a href="shipping.html">Shipping Info</a>
-                <a href="returns.html">Returns & Refunds</a>
-
-            </div>
-
-        </div>
-
-
-        <div class="container footer-bottom">
-
-            <p>
-                © 2026 Bayzid. All rights reserved.
-            </p>
-
-            <div>
-                <a href="privacy.html">Privacy Policy</a>
-                <a href="terms.html">Terms & Conditions</a>
-            </div>
-
-        </div>
-
-    </footer>
-
-
-    <!-- Main JavaScript -->
-    <script src="script.js"></script>
-
+        <button class="w-full mt-3 btn-primary text-white text-xs font-semibold py-2 rounded-lg">Add to Cart</button>
+      </div>
+    </div>`;
+}
+
+function renderProductGrid(elementId, count, prefix) {
+  document.getElementById(elementId).innerHTML = DEMO_PRODUCTS(prefix, count).map(productCard).join("");
+}
+
+function startFlashSaleTimer() {
+  let secondsLeft = 3 * 3600 + 24 * 60 + 10;
+  const el = document.getElementById("flash-sale-timer");
+  setInterval(() => {
+    secondsLeft = Math.max(0, secondsLeft - 1);
+    const h = String(Math.floor(secondsLeft / 3600)).padStart(2, "0");
+    const m = String(Math.floor((secondsLeft % 3600) / 60)).padStart(2, "0");
+    const s = String(secondsLeft % 60).padStart(2, "0");
+    el.textContent = `Ends in ${h}:${m}:${s}`;
+  }, 1000);
+}
+
+async function tryLoadRealCategories() {
+  try {
+    const data = await BayzidAPI.categories();
+    if (Array.isArray(data) && data.length) {
+      document.getElementById("categories-grid").innerHTML = data.map(c => `
+        <a href="products.html?category=${c.slug}" class="bg-white border border-slate-100 rounded-2xl p-4 text-center hover:shadow-md hover:-translate-y-0.5 transition">
+          <div class="text-3xl mb-2">🏷️</div>
+          <p class="text-xs font-medium text-slate-600">${c.name}</p>
+        </a>`).join("");
+    }
+  } catch (_) {
+    /* Backend not running yet — demo categories already rendered. */
+  }
+}
+
+renderCategories();
+renderProductGrid("flash-sale-grid", 5, "Flash");
+renderProductGrid("featured-grid", 5, "Featured");
+renderProductGrid("trending-grid", 5, "Trending");
+document.getElementById("top-sellers-grid").innerHTML = ["Dhaka Traders", "Chattogram Bazaar", "Sylhet Style", "Khulna Mart"].map(name => `
+  <div class="bg-white border border-slate-100 rounded-2xl p-5 text-center">
+    <div class="w-14 h-14 rounded-full bg-blue-50 text-[#1E3A8A] flex items-center justify-center text-xl mx-auto mb-3 font-bold">${name[0]}</div>
+    <p class="text-sm font-semibold">${name}</p>
+    <p class="text-xs text-slate-400 mt-1">⭐ 4.8 · 1.2k orders</p>
+  </div>`).join("");
+startFlashSaleTimer();
+tryLoadRealCategories();
+
+document.getElementById("newsletter-form").addEventListener("submit", (e) => {
+  e.preventDefault();
+  showToast("Subscribed! Watch your inbox for deals.", "success");
+  e.target.reset();
+});
+</script>
 </body>
-                  </html>
+</html>

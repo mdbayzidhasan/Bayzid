@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Verify Your Account — Bayzid</title>
+<link rel="icon" href="assets/logos/bayzid-logo-icon.png" />
+<script src="https://cdn.tailwindcss.com"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Manrope:wght@700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css" />
+</head>
+<body class="min-h-screen">
+
+<div id="toast-container" class="fixed top-4 right-4 z-50 flex flex-col gap-2 items-end"></div>
+
+<div class="min-h-screen flex items-center justify-center p-6">
+  <div class="w-full max-w-md">
+    <div class="flex justify-center mb-8">
+      <img src="assets/logos/bayzid-logo-full.png" alt="Bayzid" class="h-14" />
+    </div>
+
+    <div class="auth-card rounded-3xl p-8 sm:p-10 border border-slate-100 text-center">
+      <div class="w-16 h-16 rounded-2xl bg-blue-50 text-[#1E3A8A] flex items-center justify-center text-3xl mx-auto mb-5">🔐</div>
+      <h2 class="font-display text-2xl font-extrabold text-slate-900 mb-1">Verify Your Account</h2>
+      <p class="text-slate-500 text-sm mb-8">Enter the 6-digit code we sent to <span id="target-identifier" class="font-medium text-slate-700"></span></p>
+
+      <form id="otp-form">
+        <div id="otp-inputs" class="flex justify-center gap-2 mb-6">
+          <input type="text" inputmode="numeric" maxlength="1" class="otp-input input-field rounded-xl border border-slate-200" />
+          <input type="text" inputmode="numeric" maxlength="1" class="otp-input input-field rounded-xl border border-slate-200" />
+          <input type="text" inputmode="numeric" maxlength="1" class="otp-input input-field rounded-xl border border-slate-200" />
+          <input type="text" inputmode="numeric" maxlength="1" class="otp-input input-field rounded-xl border border-slate-200" />
+          <input type="text" inputmode="numeric" maxlength="1" class="otp-input input-field rounded-xl border border-slate-200" />
+          <input type="text" inputmode="numeric" maxlength="1" class="otp-input input-field rounded-xl border border-slate-200" />
+        </div>
+
+        <div id="otp-status" class="text-sm mb-6 min-h-[1.25rem]"></div>
+
+        <button type="submit" id="verify-btn"
+          class="btn-primary w-full rounded-xl text-white font-semibold py-3 shadow-lg shadow-blue-900/20 mb-4">
+          Verify Code
+        </button>
+
+        <p class="text-sm text-slate-500">
+          <span id="resend-timer" class="text-slate-400">Resend code in 60s</span>
+          <button type="button" id="resend-btn" class="hidden font-semibold text-[#1E3A8A] hover:underline">Resend Code</button>
+        </p>
+      </form>
+    </div>
+  </div>
+</div>
+
+<script src="js/api.js"></script>
+<script src="js/ui.js"></script>
+<script>
+const identifier = sessionStorage.getItem("bayzid_pending_identifier") || "your account";
+const purpose = sessionStorage.getItem("bayzid_otp_purpose") || "registration";
+document.getElementById("target-identifier").textContent = identifier;
+
+let currentCode = "";
+initOtpInputs("otp-inputs", (code) => (currentCode = code));
+
+function resetResend() {
+  document.getElementById("resend-btn").classList.add("hidden");
+  document.getElementById("resend-timer").classList.remove("hidden");
+  startCountdown("resend-timer", 60, () => {
+    document.getElementById("resend-timer").classList.add("hidden");
+    document.getElementById("resend-btn").classList.remove("hidden");
+  });
+}
+resetResend();
+
+document.getElementById("resend-btn").addEventListener("click", async () => {
+  try {
+    await BayzidAPI.requestOtp({ identifier, purpose });
+    showToast("A new code has been sent.", "success");
+    resetResend();
+  } catch (err) {
+    showToast(err.message || "Could not resend code.", "error");
+  }
+});
+
+document.getElementById("otp-form").addEventListener("submit", async (e) => {
+  e.preventDefault();
+  const btn = document.getElementById("verify-btn");
+  const statusEl = document.getElementById("otp-status");
+
+  if (currentCode.length !== 6) {
+    statusEl.textContent = "Please enter all 6 digits.";
+    statusEl.className = "text-sm mb-6 min-h-[1.25rem] text-red-600";
+    return;
+  }
+
+  setButtonLoading(btn, true, "Verifying…");
+  try {
+    await BayzidAPI.verifyOtp({ identifier, purpose, code: currentCode });
+    statusEl.textContent = "Verified successfully!";
+    statusEl.className = "text-sm mb-6 min-h-[1.25rem] text-emerald-600";
+    showToast("Account verified!", "success");
+    setTimeout(() => {
+      window.location.href = purpose === "password_reset" ? "forgot-password.html?step=reset" : "login.html";
+    }, 800);
+  } catch (err) {
+    statusEl.textContent = err.message || "Invalid OTP. Please try again.";
+    statusEl.className = "text-sm mb-6 min-h-[1.25rem] text-red-600";
+    showToast("Invalid OTP. Please try again.", "error");
+  } finally {
+    setButtonLoading(btn, false);
+  }
+});
+</script>
+</body>
+</html>

@@ -1,1058 +1,142 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-    <meta charset="UTF-8">
-
-    <meta
-        name="viewport"
-        content="width=device-width, initial-scale=1.0"
-    >
-
-    <title>Create Account - Bayzid</title>
-
-    <link rel="stylesheet" href="style.css">
-
-    <link
-        rel="preconnect"
-        href="https://fonts.googleapis.com"
-    >
-
-    <link
-        rel="preconnect"
-        href="https://fonts.gstatic.com"
-        crossorigin
-    >
-
-    <link
-        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
-        rel="stylesheet"
-    >
-
-    <style>
-
-        .auth-section {
-            min-height: 75vh;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            padding: 50px 15px;
-        }
-
-        .auth-card {
-            width: 100%;
-            max-width: 500px;
-            background: #ffffff;
-            border: 1px solid #e5e7eb;
-            border-radius: 16px;
-            padding: 32px;
-            box-shadow: 0 10px 35px rgba(0,0,0,0.06);
-        }
-
-        .auth-logo {
-            text-align: center;
-            margin-bottom: 22px;
-        }
-
-        .auth-logo .logo {
-            display: inline-flex;
-        }
-
-        .auth-card h1 {
-            text-align: center;
-            color: #111827;
-            font-size: 25px;
-            margin-bottom: 8px;
-        }
-
-        .auth-subtitle {
-            text-align: center;
-            color: #6b7280;
-            font-size: 13px;
-            margin-bottom: 25px;
-        }
-
-        .account-type {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 10px;
-            margin-bottom: 22px;
-        }
-
-        .account-type label {
-            cursor: pointer;
-        }
-
-        .account-type input {
-            display: none;
-        }
-
-        .account-type-box {
-            border: 1px solid #d1d5db;
-            border-radius: 9px;
-            padding: 15px;
-            text-align: center;
-            transition: 0.2s;
-        }
-
-        .account-type-box strong {
-            display: block;
-            color: #111827;
-            font-size: 14px;
-        }
-
-        .account-type-box span {
-            display: block;
-            color: #6b7280;
-            font-size: 10px;
-            margin-top: 4px;
-        }
-
-        .account-type input:checked + .account-type-box {
-            border-color: #1e3a8a;
-            background: #eff6ff;
-        }
-
-        .account-type input:checked + .account-type-box strong {
-            color: #1e3a8a;
-        }
-
-        .form-row {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 15px;
-        }
-
-        .form-group {
-            margin-bottom: 16px;
-        }
-
-        .form-group label {
-            display: block;
-            color: #374151;
-            font-size: 13px;
-            font-weight: 600;
-            margin-bottom: 7px;
-        }
-
-        .input-wrapper {
-            position: relative;
-        }
-
-        .input-wrapper input {
-            width: 100%;
-            box-sizing: border-box;
-            padding: 13px 42px 13px 13px;
-            border: 1px solid #d1d5db;
-            border-radius: 8px;
-            outline: none;
-            font-size: 14px;
-        }
-
-        .input-wrapper input:focus {
-            border-color: #1e3a8a;
-        }
-
-        .input-icon {
-            position: absolute;
-            right: 13px;
-            top: 50%;
-            transform: translateY(-50%);
-            color: #9ca3af;
-        }
-
-        .password-toggle {
-            position: absolute;
-            right: 10px;
-            top: 50%;
-            transform: translateY(-50%);
-            border: none;
-            background: transparent;
-            cursor: pointer;
-            font-size: 16px;
-        }
-
-        .terms {
-            display: flex;
-            align-items: flex-start;
-            gap: 8px;
-            color: #6b7280;
-            font-size: 11px;
-            line-height: 1.5;
-            margin: 5px 0 20px;
-        }
-
-        .terms input {
-            margin-top: 3px;
-            accent-color: #1e3a8a;
-        }
-
-        .terms a {
-            color: #1e3a8a;
-            font-weight: 600;
-        }
-
-        .register-submit {
-            width: 100%;
-            padding: 14px;
-            border: none;
-            border-radius: 8px;
-            background: #1e3a8a;
-            color: #ffffff;
-            font-size: 14px;
-            font-weight: 700;
-            cursor: pointer;
-        }
-
-        .register-submit:hover {
-            background: #172554;
-        }
-
-        .login-text {
-            text-align: center;
-            color: #6b7280;
-            font-size: 13px;
-            margin-top: 20px;
-        }
-
-        .login-text a {
-            color: #1e3a8a;
-            font-weight: 700;
-        }
-
-        .password-strength {
-            height: 4px;
-            background: #e5e7eb;
-            border-radius: 10px;
-            margin-top: 7px;
-            overflow: hidden;
-        }
-
-        .password-strength-bar {
-            height: 100%;
-            width: 0%;
-            transition: 0.2s;
-        }
-
-        .password-message {
-            font-size: 10px;
-            color: #6b7280;
-            margin-top: 5px;
-        }
-
-        @media (max-width: 520px) {
-
-            .auth-card {
-                padding: 25px 18px;
-            }
-
-            .form-row {
-                grid-template-columns: 1fr;
-                gap: 0;
-            }
-
-        }
-
-    </style>
-
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Create Account — Bayzid</title>
+<meta name="description" content="Create your Bayzid account as a buyer, seller, or affiliate." />
+<link rel="icon" href="assets/logos/bayzid-logo-icon.png" />
+<script src="https://cdn.tailwindcss.com"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Manrope:wght@700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css" />
 </head>
+<body class="min-h-screen">
 
+<div id="toast-container" class="fixed top-4 right-4 z-50 flex flex-col gap-2 items-end"></div>
 
-<body>
-
-
-<!-- ================= HEADER ================= -->
-
-<header class="header">
-
-    <div class="container header-wrapper">
-
-        <a
-            href="index.html"
-            class="logo"
-        >
-
-            <span class="logo-icon">
-                B
-            </span>
-
-            <span class="logo-text">
-                Bayzid
-            </span>
-
-        </a>
-
-
-        <nav class="navigation">
-
-            <a href="index.html">
-                Home
-            </a>
-
-            <a href="products.html">
-                Products
-            </a>
-
-            <a href="seller.html">
-                Sell
-            </a>
-
-            <a href="affiliate.html">
-                Earn
-            </a>
-
-        </nav>
-
-
-        <div class="header-actions">
-
-            <a
-                href="cart.html"
-                class="cart-button"
-            >
-                🛒
-
-                <span id="cartCount">
-                    0
-                </span>
-
-            </a>
-
-
-            <a
-                href="login.html"
-                class="login-button"
-            >
-                Login
-            </a>
-
-        </div>
-
+<div class="min-h-screen flex items-center justify-center p-6 py-12">
+  <div class="w-full max-w-lg">
+    <div class="flex justify-center mb-8">
+      <img src="assets/logos/bayzid-logo-full.png" alt="Bayzid" class="h-14" />
     </div>
 
-</header>
+    <div class="auth-card rounded-3xl p-8 sm:p-10 border border-slate-100">
+      <h2 class="font-display text-2xl font-extrabold text-slate-900 mb-1">Create Account</h2>
+      <p class="text-slate-500 text-sm mb-8">Join Bayzid to shop, sell, or earn as an affiliate.</p>
 
-
-<!-- ================= REGISTER ================= -->
-
-<main>
-
-<section class="auth-section">
-
-    <div class="auth-card">
-
-
-        <div class="auth-logo">
-
-            <a
-                href="index.html"
-                class="logo"
-            >
-
-                <span class="logo-icon">
-                    B
-                </span>
-
-                <span class="logo-text">
-                    Bayzid
-                </span>
-
-            </a>
-
+      <form id="register-form" class="space-y-5">
+        <div>
+          <label class="block text-sm font-medium text-slate-700 mb-1.5">Full Name</label>
+          <input id="full-name" type="text" required placeholder="HM Bayzid Hasan"
+            class="input-field w-full rounded-xl border border-slate-200 px-4 py-3" />
         </div>
 
-
-        <h1>
-            Create Your Account
-        </h1>
-
-
-        <p class="auth-subtitle">
-            Join Bayzid and start shopping,
-            selling and earning.
-        </p>
-
-
-        <!-- ACCOUNT TYPE -->
-
-        <div class="account-type">
-
-            <label>
-
-                <input
-                    type="radio"
-                    name="accountType"
-                    value="buyer"
-                    checked
-                >
-
-                <div class="account-type-box">
-
-                    <strong>
-                        🛍️ Buyer
-                    </strong>
-
-                    <span>
-                        Shop products
-                    </span>
-
-                </div>
-
-            </label>
-
-
-            <label>
-
-                <input
-                    type="radio"
-                    name="accountType"
-                    value="seller"
-                >
-
-                <div class="account-type-box">
-
-                    <strong>
-                        🏪 Seller
-                    </strong>
-
-                    <span>
-                        Sell products
-                    </span>
-
-                </div>
-
-            </label>
-
+        <div class="grid sm:grid-cols-2 gap-4">
+          <div>
+            <label class="block text-sm font-medium text-slate-700 mb-1.5">Email</label>
+            <input id="email" type="email" required placeholder="you@example.com"
+              class="input-field w-full rounded-xl border border-slate-200 px-4 py-3" />
+          </div>
+          <div>
+            <label class="block text-sm font-medium text-slate-700 mb-1.5">Phone Number</label>
+            <input id="phone" type="tel" required placeholder="01XXXXXXXXX"
+              class="input-field w-full rounded-xl border border-slate-200 px-4 py-3" />
+          </div>
         </div>
 
-
-        <!-- FORM -->
-
-        <form
-            id="registerForm"
-            onsubmit="registerUser(event)"
-        >
-
-
-            <div class="form-row">
-
-
-                <!-- FIRST NAME -->
-
-                <div class="form-group">
-
-                    <label for="firstName">
-                        First Name *
-                    </label>
-
-                    <div class="input-wrapper">
-
-                        <input
-                            type="text"
-                            id="firstName"
-                            placeholder="First name"
-                            required
-                        >
-
-                        <span class="input-icon">
-                            👤
-                        </span>
-
-                    </div>
-
-                </div>
-
-
-                <!-- LAST NAME -->
-
-                <div class="form-group">
-
-                    <label for="lastName">
-                        Last Name *
-                    </label>
-
-                    <div class="input-wrapper">
-
-                        <input
-                            type="text"
-                            id="lastName"
-                            placeholder="Last name"
-                            required
-                        >
-
-                    </div>
-
-                </div>
-
-            </div>
-
-
-            <!-- MOBILE -->
-
-            <div class="form-group">
-
-                <label for="registerPhone">
-                    Mobile Number *
-                </label>
-
-                <div class="input-wrapper">
-
-                    <input
-                        type="tel"
-                        id="registerPhone"
-                        placeholder="01XXXXXXXXX"
-                        pattern="01[0-9]{9}"
-                        required
-                    >
-
-                    <span class="input-icon">
-                        📱
-                    </span>
-
-                </div>
-
-            </div>
-
-
-            <!-- EMAIL -->
-
-            <div class="form-group">
-
-                <label for="registerEmail">
-                    Email Address *
-                </label>
-
-                <div class="input-wrapper">
-
-                    <input
-                        type="email"
-                        id="registerEmail"
-                        placeholder="example@email.com"
-                        required
-                    >
-
-                    <span class="input-icon">
-                        ✉️
-                    </span>
-
-                </div>
-
-            </div>
-
-
-            <!-- PASSWORD -->
-
-            <div class="form-group">
-
-                <label for="registerPassword">
-                    Password *
-                </label>
-
-                <div class="input-wrapper">
-
-                    <input
-                        type="password"
-                        id="registerPassword"
-                        placeholder="Create a password"
-                        minlength="8"
-                        required
-                        oninput="checkPasswordStrength()"
-                    >
-
-                    <button
-                        type="button"
-                        class="password-toggle"
-                        onclick="toggleRegisterPassword()"
-                    >
-                        👁️
-                    </button>
-
-                </div>
-
-
-                <div class="password-strength">
-
-                    <div
-                        id="passwordStrengthBar"
-                        class="password-strength-bar"
-                    ></div>
-
-                </div>
-
-
-                <div
-                    id="passwordMessage"
-                    class="password-message"
-                >
-                    Use at least 8 characters.
-                </div>
-
-            </div>
-
-
-            <!-- CONFIRM PASSWORD -->
-
-            <div class="form-group">
-
-                <label for="confirmPassword">
-                    Confirm Password *
-                </label>
-
-                <div class="input-wrapper">
-
-                    <input
-                        type="password"
-                        id="confirmPassword"
-                        placeholder="Confirm your password"
-                        minlength="8"
-                        required
-                    >
-
-                    <button
-                        type="button"
-                        class="password-toggle"
-                        onclick="toggleConfirmPassword()"
-                    >
-                        👁️
-                    </button>
-
-                </div>
-
-            </div>
-
-
-            <!-- TERMS -->
-
-            <label class="terms">
-
-                <input
-                    type="checkbox"
-                    id="agreeTerms"
-                    required
-                >
-
-                <span>
-
-                    I agree to Bayzid's
-
-                    <a href="terms.html">
-                        Terms & Conditions
-                    </a>
-
-                    and
-
-                    <a href="privacy.html">
-                        Privacy Policy
-                    </a>.
-
-                </span>
-
-            </label>
-
-
-            <!-- SUBMIT -->
-
-            <button
-                type="submit"
-                class="register-submit"
-            >
-                Create Account
-            </button>
-
-        </form>
-
-
-        <p class="login-text">
-
-            Already have an account?
-
-            <a href="login.html">
-                Login
-            </a>
-
-        </p>
-
-    </div>
-
-</section>
-
-</main>
-
-
-<!-- ================= FOOTER ================= -->
-
-<footer class="footer">
-
-    <div class="container footer-grid">
-
-
-        <div class="footer-about">
-
-            <a
-                href="index.html"
-                class="logo footer-logo"
-            >
-
-                <span class="logo-icon">
-                    B
-                </span>
-
-                <span class="logo-text">
-                    Bayzid
-                </span>
-
-            </a>
-
-            <p>
-                Shop, Sell & Earn with Bayzid —
-                your modern online marketplace.
-            </p>
-
+        <div class="grid sm:grid-cols-2 gap-4">
+          <div>
+            <label class="block text-sm font-medium text-slate-700 mb-1.5">Password</label>
+            <input id="password" type="password" required placeholder="••••••••"
+              class="input-field w-full rounded-xl border border-slate-200 px-4 py-3" />
+          </div>
+          <div>
+            <label class="block text-sm font-medium text-slate-700 mb-1.5">Confirm Password</label>
+            <input id="confirm-password" type="password" required placeholder="••••••••"
+              class="input-field w-full rounded-xl border border-slate-200 px-4 py-3" />
+          </div>
         </div>
-
-
-        <div class="footer-column">
-
-            <h3>
-                Marketplace
-            </h3>
-
-            <a href="products.html">
-                All Products
-            </a>
-
-            <a href="categories.html">
-                Categories
-            </a>
-
-            <a href="deals.html">
-                Deals
-            </a>
-
-        </div>
-
-
-        <div class="footer-column">
-
-            <h3>
-                Business
-            </h3>
-
-            <a href="seller.html">
-                Become a Seller
-            </a>
-
-            <a href="affiliate.html">
-                Affiliate Program
-            </a>
-
-        </div>
-
-
-        <div class="footer-column">
-
-            <h3>
-                Support
-            </h3>
-
-            <a href="contact.html">
-                Contact Us
-            </a>
-
-            <a href="help.html">
-                Help Center
-            </a>
-
-        </div>
-
-    </div>
-
-
-    <div class="container footer-bottom">
-
-        <p>
-            © 2026 Bayzid. All rights reserved.
-        </p>
 
         <div>
-
-            <a href="privacy.html">
-                Privacy Policy
-            </a>
-
-            <a href="terms.html">
-                Terms & Conditions
-            </a>
-
+          <label class="block text-sm font-medium text-slate-700 mb-2">Account Type</label>
+          <div class="grid grid-cols-3 gap-3">
+            <label class="account-type-option cursor-pointer">
+              <input type="radio" name="account_type" value="buyer" class="peer sr-only" checked />
+              <div class="rounded-xl border-2 border-slate-200 peer-checked:border-[#1E3A8A] peer-checked:bg-blue-50 text-center py-3 text-sm font-medium transition">
+                🛍️<br />Buyer
+              </div>
+            </label>
+            <label class="account-type-option cursor-pointer">
+              <input type="radio" name="account_type" value="seller" class="peer sr-only" />
+              <div class="rounded-xl border-2 border-slate-200 peer-checked:border-[#1E3A8A] peer-checked:bg-blue-50 text-center py-3 text-sm font-medium transition">
+                🏪<br />Seller
+              </div>
+            </label>
+            <label class="account-type-option cursor-pointer">
+              <input type="radio" name="account_type" value="affiliate" class="peer sr-only" />
+              <div class="rounded-xl border-2 border-slate-200 peer-checked:border-[#1E3A8A] peer-checked:bg-blue-50 text-center py-3 text-sm font-medium transition">
+                📈<br />Affiliate
+              </div>
+            </label>
+          </div>
         </div>
 
+        <label class="flex items-start gap-2 text-sm text-slate-600">
+          <input type="checkbox" id="terms" required class="mt-1 rounded border-slate-300 text-[#1E3A8A] focus:ring-[#1E3A8A]" />
+          <span>I agree to Bayzid's <a href="#" class="text-[#1E3A8A] font-medium hover:underline">Terms &amp; Conditions</a> and <a href="#" class="text-[#1E3A8A] font-medium hover:underline">Privacy Policy</a>.</span>
+        </label>
+
+        <button type="submit" id="register-btn"
+          class="btn-primary w-full rounded-xl text-white font-semibold py-3 shadow-lg shadow-blue-900/20">
+          Create Account
+        </button>
+      </form>
+
+      <p class="text-center text-sm text-slate-500 mt-8">
+        Already have an account?
+        <a href="login.html" class="font-semibold text-[#1E3A8A] hover:underline">Sign In</a>
+      </p>
     </div>
+  </div>
+</div>
 
-</footer>
-
-
-<!-- ================= JAVASCRIPT ================= -->
-
-<script src="script.js"></script>
-
+<script src="js/api.js"></script>
+<script src="js/ui.js"></script>
 <script>
-
-
-/* =========================================
-   PASSWORD STRENGTH
-========================================= */
-
-function checkPasswordStrength() {
-
-    const password =
-        document.getElementById(
-            "registerPassword"
-        ).value;
-
-
-    const bar =
-        document.getElementById(
-            "passwordStrengthBar"
-        );
-
-
-    const message =
-        document.getElementById(
-            "passwordMessage"
-        );
-
-
-    let strength = 0;
-
-
-    if (password.length >= 8) {
-        strength++;
-    }
-
-    if (/[A-Z]/.test(password)) {
-        strength++;
-    }
-
-    if (/[0-9]/.test(password)) {
-        strength++;
-    }
-
-    if (/[^A-Za-z0-9]/.test(password)) {
-        strength++;
-    }
-
-
-    const widths = [
-        "0%",
-        "25%",
-        "50%",
-        "75%",
-        "100%"
-    ];
-
-
-    bar.style.width =
-        widths[strength];
-
-
-    if (strength === 0) {
-
-        message.textContent =
-            "Use at least 8 characters.";
-
-    } else if (strength === 1) {
-
-        message.textContent =
-            "Weak password.";
-
-    } else if (strength === 2) {
-
-        message.textContent =
-            "Fair password.";
-
-    } else if (strength === 3) {
-
-        message.textContent =
-            "Good password.";
-
-    } else {
-
-        message.textContent =
-            "Strong password.";
-
-    }
-
-}
-
-
-/* =========================================
-   PASSWORD TOGGLES
-========================================= */
-
-function toggleRegisterPassword() {
-
-    const input =
-        document.getElementById(
-            "registerPassword"
-        );
-
-    input.type =
-        input.type === "password"
-        ? "text"
-        : "password";
-
-}
-
-
-function toggleConfirmPassword() {
-
-    const input =
-        document.getElementById(
-            "confirmPassword"
-        );
-
-    input.type =
-        input.type === "password"
-        ? "text"
-        : "password";
-
-}
-
-
-/* =========================================
-   REGISTER USER
-========================================= */
-
-function registerUser(event) {
-
-    event.preventDefault();
-
-
-    const firstName =
-        document.getElementById(
-            "firstName"
-        ).value.trim();
-
-
-    const lastName =
-        document.getElementById(
-            "lastName"
-        ).value.trim();
-
-
-    const phone =
-        document.getElementById(
-            "registerPhone"
-        ).value.trim();
-
-
-    const email =
-        document.getElementById(
-            "registerEmail"
-        ).value.trim();
-
-
-    const password =
-        document.getElementById(
-            "registerPassword"
-        ).value;
-
-
-    const confirmPassword =
-        document.getElementById(
-            "confirmPassword"
-        ).value;
-
-
-    const accountType =
-        document.querySelector(
-            'input[name="accountType"]:checked'
-        )?.value || "buyer";
-
-
-    const agreeTerms =
-        document.getElementById(
-            "agreeTerms"
-        ).checked;
-
-
-    /* Password check */
-
-    if (password.length < 8) {
-
-        showNotification(
-            "Password must be at least 8 characters."
-        );
-
-        return;
-
-    }
-
-
-    /* Confirm password */
-
-    if (password !== confirmPassword) {
-
-        showNotification(
-            "Passwords do not match."
-        );
-
-        return;
-
-    }
-
-
-    if (!agreeTerms) {
-
-        showNotification(
-            "Please accept the Terms & Conditions."
-        );
-
-        return;
-
-    }
-
-
-    /*
-       DEMO REGISTRATION
-
-       Real registration will later use:
-
-       Django REST API
-
-       POST /api/auth/register/
-
-       Password will NEVER be stored
-       as plain text in the real backend.
-    */
-
-
-    const user = {
-
-        name:
-            firstName +
-            " " +
-            lastName,
-
-        firstName:
-            firstName,
-
-        lastName:
-            lastName,
-
-        phone:
-            phone,
-
-        email:
-            email,
-
-        accountType:
-            accountType,
-
-        registeredAt:
-            new Date().toISOString()
-
-    };
-
-
-    localStora
+document.getElementById("register-form").addEventListener("submit", async (e) => {
+  e.preventDefault();
+  const btn = document.getElementById("register-btn");
+  const password = document.getElementById("password").value;
+  const confirmPassword = document.getElementById("confirm-password").value;
+
+  if (password !== confirmPassword) {
+    showToast("Passwords do not match.", "error");
+    return;
+  }
+
+  const payload = {
+    username: document.getElementById("full-name").value.trim(),
+    email: document.getElementById("email").value.trim(),
+    phone_number: document.getElementById("phone").value.trim(),
+    password,
+    confirm_password: confirmPassword,
+    account_type: document.querySelector('input[name="account_type"]:checked').value,
+  };
+
+  setButtonLoading(btn, true, "Creating account…");
+  try {
+    await BayzidAPI.register(payload);
+    showToast("Account created! Check your email for a code.", "success");
+    sessionStorage.setItem("bayzid_pending_identifier", payload.email);
+    sessionStorage.setItem("bayzid_otp_purpose", "registration");
+    setTimeout(() => (window.location.href = "otp.html"), 800);
+  } catch (err) {
+    showToast(err.message || "Registration failed. Please try again.", "error");
+  } finally {
+    setButtonLoading(btn, false);
+  }
+});
+</script>
+</body>
+</html>
