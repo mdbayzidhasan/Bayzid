@@ -1,29 +1,31 @@
 from django.contrib import admin
 
-from .models import Cart, CartItem, Coupon, Order, OrderItem, Wishlist
+from .models import Category, Product, ProductImage, ProductVariant
 
 
-class OrderItemInline(admin.TabularInline):
-    model = OrderItem
+class ProductImageInline(admin.TabularInline):
+    model = ProductImage
+    extra = 1
+
+
+class ProductVariantInline(admin.TabularInline):
+    model = ProductVariant
     extra = 0
-    readonly_fields = ["product", "seller_store", "quantity", "unit_price", "line_total"]
 
 
-@admin.register(Order)
-class OrderAdmin(admin.ModelAdmin):
-    list_display = ["order_number", "buyer", "status", "grand_total", "created_at"]
-    list_filter = ["status"]
-    search_fields = ["order_number", "buyer__email"]
-    inlines = [OrderItemInline]
-    readonly_fields = ["id", "order_number", "subtotal", "discount_total", "grand_total", "created_at"]
+@admin.register(Category)
+class CategoryAdmin(admin.ModelAdmin):
+    list_display = ["name", "parent", "is_active"]
+    list_filter = ["is_active"]
+    search_fields = ["name"]
+    prepopulated_fields = {"slug": ("name",)}
 
 
-@admin.register(Coupon)
-class CouponAdmin(admin.ModelAdmin):
-    list_display = ["code", "discount_type", "discount_value", "times_used", "max_uses", "is_active"]
-    search_fields = ["code"]
-
-
-admin.site.register(Cart)
-admin.site.register(CartItem)
-admin.site.register(Wishlist)
+@admin.register(Product)
+class ProductAdmin(admin.ModelAdmin):
+    list_display = ["name", "seller", "category", "price", "stock_quantity", "status", "average_rating"]
+    list_filter = ["status", "category"]
+    search_fields = ["name", "sku"]
+    prepopulated_fields = {"slug": ("name",)}
+    inlines = [ProductImageInline, ProductVariantInline]
+    readonly_fields = ["id", "average_rating", "review_count", "created_at", "updated_at"]

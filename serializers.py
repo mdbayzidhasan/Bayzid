@@ -1,61 +1,76 @@
 from rest_framework import serializers
 
-from products.serializers import ProductListSerializer
-from .models import Cart, CartItem, Coupon, Order, OrderItem, Wishlist
+from .models import Category, Product, ProductImage, ProductVariant
 
 
-class CartItemSerializer(serializers.ModelSerializer):
-    product_detail = ProductListSerializer(source="product", read_only=True)
-    line_total = serializers.DecimalField(max_digits=12, decimal_places=2, read_only=True)
+class CategorySerializer(serializers.ModelSerializer):
+    children = serializers.SerializerMethodField()
 
     class Meta:
-        model = CartItem
-        fields = ["id", "product", "product_detail", "quantity", "saved_for_later", "line_total"]
+        model = Category
+        fields = ["id", "name", "slug", "parent", "image", "description", "is_active", "children"]
+
+    def get_children(self, obj):
+        return CategorySerializer(obj.children.filter(is_active=True), many=True).data
 
 
-class CartSerializer(serializers.ModelSerializer):
-    items = CartItemSerializer(many=True, read_only=True)
-    subtotal = serializers.DecimalField(max_digits=12, decimal_places=2, read_only=True)
+class ProductImageSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = ProductImage
+        fields = ["id", "image", "alt_text", "is_primary", "sort_order"]
+
+
+class ProductVariantSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = ProductVariant
+        fields = ["id", "name", "sku_suffix", "price_delta", "stock_quantity"]
+
+
+class ProductListSerializer(serializers.ModelSerializer):
+    primary_image = serializers.SerializerMethodField()
+    seller_name = serializers.CharField(source="seller.name", read_only=True)
+    final_price = serializers.DecimalField(max_digits=12, decimal_places=2, read_only=True)
 
     class Meta:
-        model = Cart
-        fields = ["id", "items", "subtotal"]
-
-
-class WishlistSerializer(serializers.ModelSerializer):
-    product_detail = ProductListSerializer(source="product", read_only=True)
-
-    class Meta:
-        model = Wishlist
-        fields = ["id", "product", "product_detail", "created_at"]
-
-
-class OrderItemSerializer(serializers.ModelSerializer):
-    product_name = serializers.CharField(source="product.name", read_only=True)
-
-    class Meta:
-        model = OrderItem
-        fields = ["id", "product", "product_name", "seller_store", "quantity", "unit_price", "line_total", "status"]
-
-
-class OrderSerializer(serializers.ModelSerializer):
-    items = OrderItemSerializer(many=True, read_only=True)
-
-    class Meta:
-        model = Order
+        model = Product
         fields = [
-            "id", "order_number", "shipping_address", "coupon", "affiliate_code",
-            "subtotal", "discount_total", "delivery_charge", "grand_total",
-            "status", "items", "created_at",
+            "id", "name", "slug", "price", "discount_percent", "final_price",
+            "average_rating", "review_count", "seller_name", "primary_image",
+            "status", "stock_quantity",
         ]
-        read_only_fields = [
-            "id", "order_number", "subtotal", "discount_total",
-            "delivery_charge", "grand_total", "status", "items", "created_at",
+
+    def get_primary_image(self, obj):
+        img = obj.images.filter(is_primary=True).first() or obj.images.first()
+        return img.image.url if img else None
+
+
+class ProductDetailSerializer(serializers.ModelSerializer):
+    images = ProductImageSerializer(many=True, read_only=True)
+    variants = ProductVariantSerializer(many=True, read_only=True)
+    seller_name = serializers.CharField(source="seller.name", read_only=True)
+    category_name = serializers.CharField(source="category.name", read_only=True)
+    final_price = serializers.DecimalField(max_digits=12, decimal_places=2, read_only=True)
+
+    class Meta:
+        model = Product
+        fields = [
+            "id", "name", "slug", "sku", "description", "specifications",
+            "price", "discount_percent", "final_price", "stock_quantity",
+            "status", "average_rating", "review_count", "seller_name",
+            "category", "category_name", "images", "variants", "created_at",
         ]
 
 
-class CheckoutSerializer(serializers.Serializer):
-    shipping_address = serializers.UUIDField()
-    coupon_code = serializers.CharField(required=False, allow_blank=True)
-    affiliate_code = serializers.CharField(required=False, allow_blank=True)
-    payment_method = serializers.ChoiceField(choices=["bkash", "nagad", "card", "cod"])
+class ProductWriteSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Product
+        fields = [
+            "name", "slug", "sku", "category", "description", "specifications",
+            "price", "discount_percent", "stock_quantity", "weight_kg",
+            "is_affiliate_enabled",
+        ]
+
+    def create(self, validated_data):
+        validated_data["seller"] = self.context["request"].user.seller_profile.store
+        validated_data["status"] = Product.Status.PENDING
+        return super().create(validated_data)

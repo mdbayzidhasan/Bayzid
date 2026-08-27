@@ -1,29 +1,90 @@
-import uuid
-
 from django.db import models
 
-
-class BaseModel(models.Model):
-    """
-    Abstract base for all Bayzid models.
-    Provides a UUID primary key (safe to expose in URLs/APIs) plus
-    created/updated timestamps.
-    """
-
-    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-    created_at = models.DateTimeField(auto_now_add=True)
-    updated_at = models.DateTimeField(auto_now=True)
-
-    class Meta:
-        abstract = True
-        ordering = ["-created_at"]
+from core.models import BaseModel
+from sellers.models import Store
 
 
-def generate_order_number():
-    """Human-friendly, sortable order number: BYZ-YYYYMMDD-XXXXXX"""
-    import random
-    from django.utils import timezone
+class Category(BaseModel):
+    name = models.CharField(max_length=150)
+    slug = models.SlugField(max_length=170, unique=True)
+    parent = models.ForeignKey(
+        "self", on_delete=models.CASCADE, null=True, blank=True, related_name="children"
+    )
+    image = models.ImageField(upload_to="categories/", null=True, blank=True)
+    description = models.TextField(blank=True)
+    is_active = models.BooleanField(default=True)
 
-    date_part = timezone.now().strftime("%Y%m%d")
-    rand_part = "".join(random.choices("0123456789", k=6))
-    return f"BYZ-{date_part}-{rand_part}"
+    class Meta(BaseModel.Meta):
+        verbose_name_plural = "categories"
+        indexes = [models.Index(fields=["slug"]), models.Index(fields=["parent"])]
+
+    def __str__(self):
+        return self.name
+
+
+class Product(BaseModel):
+    class Status(models.TextChoices):
+        DRAFT = "draft", "Draft"
+        PENDING = "pending", "Pending Approval"
+        PUBLISHED = "published", "Published"
+        REJECTED = "rejected", "Rejected"
+        OUT_OF_STOCK = "out_of_stock", "Out of Stock"
+
+    seller = models.ForeignKey(Store, on_delete=models.CASCADE, related_name="products")
+    category = models.ForeignKey(Category, on_delete=models.PROTECT, related_name="products")
+    name = models.CharField(max_length=250)
+    slug = models.SlugField(max_length=270, unique=True)
+    sku = models.CharField(max_length=64, unique=True)
+    description = models.TextField()
+    specifications = models.JSONField(default=dict, blank=True)
+    price = models.DecimalField(max_digits=12, decimal_places=2)
+    discount_percent = models.DecimalField(max_digits=5, decimal_places=2, default=0)
+    stock_quantity = models.PositiveIntegerField(default=0)
+    weight_kg = models.DecimalField(max_digits=8, decimal_places=3, null=True, blank=True)
+    status = models.CharField(max_length=20, choices=Status.choices, default=Status.DRAFT)
+    is_affiliate_enabled = models.BooleanField(default=True)
+    average_rating = models.DecimalField(max_digits=3, decimal_places=2, default=0)
+    review_count = models.PositiveIntegerField(default=0)
+
+    class Meta(BaseModel.Meta):
+        indexes = [
+            models.Index(fields=["slug"]),
+            models.Index(fields=["status"]),
+            models.Index(fields=["category"]),
+            models.Index(fields=["seller"]),
+        ]
+
+    @property
+    def final_price(self):
+        if self.discount_percent:
+            return round(self.price * (1 - self.discount_percent / 100), 2)
+        return self.price
+
+    @property
+    def in_stock(self):
+        return self.stock_quantity > 0
+
+    def __str__(self):
+        return self.name
+
+
+class ProductImage(BaseModel):
+    product = models.ForeignKey(Product, on_delete=models.CASCADE, related_name="images")
+    image = models.ImageField(upload_to="products/")
+    alt_text = models.CharField(max_length=200, blank=True)
+    is_primary = models.BooleanField(default=False)
+    sort_order = models.PositiveSmallIntegerField(default=0)
+
+    class Meta(BaseModel.Meta):
+        ordering = ["sort_order", "-created_at"]
+
+
+class ProductVariant(BaseModel):
+    product = models.ForeignKey(Product, on_delete=models.CASCADE, related_name="variants")
+    name = models.CharField(max_length=100)  # e.g. "Color: Red / Size: L"
+    sku_suffix = models.CharField(max_length=32, blank=True)
+    price_delta = models.DecimalField(max_digits=10, decimal_places=2, default=0)
+    stock_quantity = models.PositiveIntegerField(default=0)
+
+    def __str__(self):
+        return f"{self.product.name} — {self.name}"
