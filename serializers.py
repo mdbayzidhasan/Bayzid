@@ -1,10 +1,16 @@
 from rest_framework import serializers
 
-from .models import Payment
+from .models import Banner, Notification
 
 
-class PaymentSerializer(serializers.ModelSerializer):
+class NotificationSerializer(serializers.ModelSerializer):
     class Meta:
-        model = Payment
-        fields = ["id", "order", "method", "amount", "status", "gateway_reference", "paid_at", "created_at"]
+        model = Notification
+        fields = ["id", "type", "title", "message", "is_read", "link", "created_at"]
         read_only_fields = fields
+
+
+class BannerSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Banner
+        fields = ["id", "title", "image", "link_url"]
