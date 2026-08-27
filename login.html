@@ -1,0 +1,531 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>Login - Bayzid</title>
+
+    <link rel="stylesheet" href="style.css">
+
+    <link
+        rel="preconnect"
+        href="https://fonts.googleapis.com"
+    >
+
+    <link
+        rel="preconnect"
+        href="https://fonts.gstatic.com"
+        crossorigin
+    >
+
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
+        rel="stylesheet"
+    >
+
+    <style>
+
+        .auth-section {
+            min-height: 75vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 60px 15px;
+        }
+
+        .auth-card {
+            width: 100%;
+            max-width: 430px;
+            background: #ffffff;
+            border: 1px solid #e5e7eb;
+            border-radius: 16px;
+            padding: 32px;
+            box-shadow: 0 10px 35px rgba(0,0,0,0.06);
+        }
+
+        .auth-logo {
+            text-align: center;
+            margin-bottom: 25px;
+        }
+
+        .auth-logo .logo {
+            display: inline-flex;
+        }
+
+        .auth-card h1 {
+            text-align: center;
+            color: #111827;
+            font-size: 25px;
+            margin-bottom: 8px;
+        }
+
+        .auth-subtitle {
+            text-align: center;
+            color: #6b7280;
+            font-size: 13px;
+            margin-bottom: 28px;
+        }
+
+        .form-group {
+            margin-bottom: 18px;
+        }
+
+        .form-group label {
+            display: block;
+            color: #374151;
+            font-size: 13px;
+            font-weight: 600;
+            margin-bottom: 7px;
+        }
+
+        .input-wrapper {
+            position: relative;
+        }
+
+        .input-wrapper input {
+            width: 100%;
+            padding: 13px 42px 13px 13px;
+            border: 1px solid #d1d5db;
+            border-radius: 8px;
+            outline: none;
+            font-size: 14px;
+            box-sizing: border-box;
+        }
+
+        .input-wrapper input:focus {
+            border-color: #1e3a8a;
+        }
+
+        .input-icon {
+            position: absolute;
+            right: 13px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #9ca3af;
+        }
+
+        .password-toggle {
+            position: absolute;
+            right: 12px;
+            top: 50%;
+            transform: translateY(-50%);
+            border: none;
+            background: transparent;
+            cursor: pointer;
+            font-size: 16px;
+        }
+
+        .form-options {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .remember-me {
+            display: flex;
+            align-items: center;
+            gap: 7px;
+            color: #6b7280;
+            font-size: 12px;
+        }
+
+        .remember-me input {
+            accent-color: #1e3a8a;
+        }
+
+        .forgot-password {
+            color: #1e3a8a;
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        .login-submit {
+            width: 100%;
+            padding: 14px;
+            border: none;
+            border-radius: 8px;
+            background: #1e3a8a;
+            color: #ffffff;
+            font-size: 14px;
+            font-weight: 700;
+            cursor: pointer;
+        }
+
+        .login-submit:hover {
+            background: #172554;
+        }
+
+        .divider {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin: 24px 0;
+            color: #9ca3af;
+            font-size: 11px;
+        }
+
+        .divider::before,
+        .divider::after {
+            content: "";
+            flex: 1;
+            height: 1px;
+            background: #e5e7eb;
+        }
+
+        .register-text {
+            text-align: center;
+            color: #6b7280;
+            font-size: 13px;
+        }
+
+        .register-text a {
+            color: #1e3a8a;
+            font-weight: 700;
+        }
+
+        .demo-login {
+            margin-top: 20px;
+            padding: 12px;
+            border-radius: 8px;
+            background: #eff6ff;
+            color: #1e3a8a;
+            font-size: 11px;
+            text-align: center;
+        }
+
+        @media (max-width: 480px) {
+
+            .auth-card {
+                padding: 25px 18px;
+            }
+
+            .auth-section {
+                padding: 40px 12px;
+            }
+
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+
+<!-- ================= HEADER ================= -->
+
+<header class="header">
+
+    <div class="container header-wrapper">
+
+        <a
+            href="index.html"
+            class="logo"
+        >
+
+            <span class="logo-icon">
+                B
+            </span>
+
+            <span class="logo-text">
+                Bayzid
+            </span>
+
+        </a>
+
+
+        <nav class="navigation">
+
+            <a href="index.html">
+                Home
+            </a>
+
+            <a href="products.html">
+                Products
+            </a>
+
+            <a href="seller.html">
+                Sell
+            </a>
+
+            <a href="affiliate.html">
+                Earn
+            </a>
+
+        </nav>
+
+
+        <div class="header-actions">
+
+            <a
+                href="cart.html"
+                class="cart-button"
+            >
+                🛒
+                <span id="cartCount">
+                    0
+                </span>
+            </a>
+
+            <a
+                href="register.html"
+                class="register-button"
+            >
+                Register
+            </a>
+
+        </div>
+
+    </div>
+
+</header>
+
+
+<!-- ================= LOGIN ================= -->
+
+<main>
+
+<section class="auth-section">
+
+    <div class="auth-card">
+
+
+        <!-- LOGO -->
+
+        <div class="auth-logo">
+
+            <a
+                href="index.html"
+                class="logo"
+            >
+
+                <span class="logo-icon">
+                    B
+                </span>
+
+                <span class="logo-text">
+                    Bayzid
+                </span>
+
+            </a>
+
+        </div>
+
+
+        <h1>
+            Welcome Back
+        </h1>
+
+
+        <p class="auth-subtitle">
+            Login to your Bayzid account
+        </p>
+
+
+        <!-- LOGIN FORM -->
+
+        <form
+            id="loginForm"
+            onsubmit="loginUser(event)"
+        >
+
+
+            <!-- EMAIL / PHONE -->
+
+            <div class="form-group">
+
+                <label for="loginIdentifier">
+                    Email or Mobile Number
+                </label>
+
+                <div class="input-wrapper">
+
+                    <input
+                        type="text"
+                        id="loginIdentifier"
+                        placeholder="Email or 01XXXXXXXXX"
+                        required
+                    >
+
+                    <span class="input-icon">
+                        👤
+                    </span>
+
+                </div>
+
+            </div>
+
+
+            <!-- PASSWORD -->
+
+            <div class="form-group">
+
+                <label for="loginPassword">
+                    Password
+                </label>
+
+                <div class="input-wrapper">
+
+                    <input
+                        type="password"
+                        id="loginPassword"
+                        placeholder="Enter your password"
+                        required
+                    >
+
+                    <button
+                        type="button"
+                        class="password-toggle"
+                        onclick="togglePassword()"
+                        aria-label="Show password"
+                    >
+                        👁️
+                    </button>
+
+                </div>
+
+            </div>
+
+
+            <!-- OPTIONS -->
+
+            <div class="form-options">
+
+                <label class="remember-me">
+
+                    <input
+                        type="checkbox"
+                        id="rememberMe"
+                    >
+
+                    Remember me
+
+                </label>
+
+
+                <a
+                    href="forgot-password.html"
+                    class="forgot-password"
+                >
+                    Forgot Password?
+                </a>
+
+            </div>
+
+
+            <!-- LOGIN -->
+
+            <button
+                type="submit"
+                class="login-submit"
+            >
+                Login
+            </button>
+
+        </form>
+
+
+        <div class="divider">
+            OR
+        </div>
+
+
+        <!-- REGISTER -->
+
+        <p class="register-text">
+
+            Don't have an account?
+
+            <a href="register.html">
+                Create Account
+            </a>
+
+        </p>
+
+
+        <!-- DEMO NOTE -->
+
+        <div class="demo-login">
+
+            🔐 Demo login — real authentication
+            will be connected to Django backend.
+
+        </div>
+
+    </div>
+
+</section>
+
+</main>
+
+
+<!-- ================= FOOTER ================= -->
+
+<footer class="footer">
+
+    <div class="container footer-grid">
+
+
+        <div class="footer-about">
+
+            <a
+                href="index.html"
+                class="logo footer-logo"
+            >
+
+                <span class="logo-icon">
+                    B
+                </span>
+
+                <span class="logo-text">
+                    Bayzid
+                </span>
+
+            </a>
+
+            <p>
+                Shop, Sell & Earn with Bayzid —
+                your modern online marketplace.
+            </p>
+
+        </div>
+
+
+        <div class="footer-column">
+
+            <h3>
+                Marketplace
+            </h3>
+
+            <a href="products.html">
+                All Products
+            </a>
+
+            <a href="categories.html">
+                Categories
+            </a>
+
+            <a href="deals.html">
+                Deals
+            </a>
+
+        </div>
+
+
+        <div class="footer-column">
+
+            <h3>
+                Business
+            </h3>
+
+            <a href="seller.html">
+               
