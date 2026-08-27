@@ -1,15 +1,14 @@
 from django.urls import path
 from rest_framework.routers import DefaultRouter
 
-from .views import (
-    AffiliateLinkViewSet, BecomeAffiliateView, MyAffiliateDashboardView, TrackClickView,
-)
+from .views import CartItemViewSet, CartView, CheckoutView, OrderViewSet, WishlistViewSet
 
 router = DefaultRouter()
-router.register("links", AffiliateLinkViewSet, basename="affiliate-link")
+router.register("cart-items", CartItemViewSet, basename="cart-item")
+router.register("wishlist", WishlistViewSet, basename="wishlist")
+router.register("", OrderViewSet, basename="order")
 
 urlpatterns = [
-    path("apply/", BecomeAffiliateView.as_view(), name="affiliate-apply"),
-    path("dashboard/", MyAffiliateDashboardView.as_view(), name="affiliate-dashboard"),
-    path("links/<uuid:pk>/track-click/", TrackClickView.as_view(), name="affiliate-track-click"),
+    path("cart/", CartView.as_view(), name="cart"),
+    path("checkout/", CheckoutView.as_view(), name="checkout"),
 ] + router.urls
