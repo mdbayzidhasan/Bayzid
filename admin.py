@@ -1,10 +1,10 @@
 from django.contrib import admin
 
-from .models import Review
+from .models import Payment
 
 
-@admin.register(Review)
-class ReviewAdmin(admin.ModelAdmin):
-    list_display = ["product", "user", "rating", "is_verified_purchase", "created_at"]
-    list_filter = ["rating", "is_verified_purchase"]
-    search_fields = ["product__name", "user__email"]
+@admin.register(Payment)
+class PaymentAdmin(admin.ModelAdmin):
+    list_display = ["order", "method", "amount", "status", "paid_at"]
+    list_filter = ["method", "status"]
+    search_fields = ["order__order_number"]
