@@ -1,9 +1,24 @@
-from rest_framework.routers import DefaultRouter
+from django.conf import settings
+from django.conf.urls.static import static
+from django.contrib import admin
+from django.urls import include, path
 
-from .views import BannerViewSet, NotificationViewSet
+api_v1_patterns = [
+    path("auth/", include("accounts.urls")),
+    path("products/", include("products.urls")),
+    path("orders/", include("orders.urls")),
+    path("sellers/", include("sellers.urls")),
+    path("affiliates/", include("affiliates.urls")),
+    path("wallet/", include("wallet.urls")),
+    path("payments/", include("payments.urls")),
+    path("reviews/", include("reviews.urls")),
+    path("notifications/", include("notifications.urls")),
+]
 
-router = DefaultRouter()
-router.register("banners", BannerViewSet, basename="banner")
-router.register("", NotificationViewSet, basename="notification")
+urlpatterns = [
+    path("admin/", admin.site.urls),
+    path("api/v1/", include(api_v1_patterns)),
+]
 
-urlpatterns = router.urls
+if settings.DEBUG:
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
