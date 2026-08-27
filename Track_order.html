@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>Track Order - Bayzid</title>
+
+    <link rel="stylesheet" href="style.css">
+
+    <link
+        rel="preconnect"
+        href="https://fonts.googleapis.com"
+    >
+
+    <link
+        rel="preconnect"
+        href="https://fonts.gstatic.com"
+        crossorigin
+    >
+
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
+        rel="stylesheet"
+    >
+
+    <style>
+
+        .tracking-section {
+            padding: 60px 0;
+            min-height: 70vh;
+        }
+
+        .tracking-box {
+            max-width: 700px;
+            margin: 0 auto 35px;
+            background: #ffffff;
+            border: 1px solid #e5e7eb;
+            border-radius: 15px;
+            padding: 28px;
+        }
+
+        .tracking-box h2 {
+            color: #111827;
+            font-size: 20px;
+            margin-bottom: 8px;
+        }
+
+        .tracking-box p {
+            color: #6b7280;
+            font-size: 13px;
+            margin-bottom: 20px;
+        }
+
+        .tracking-form {
+            display: flex;
+            gap: 10px;
+        }
+
+        .tracking-form input {
+            flex: 1;
+            padding: 13px;
+            border: 1px solid #d1d5db;
+            border-radius: 8px;
+            outline: none;
+        }
+
+        .tracking-form input:focus {
+            border-color: #1e3a8a;
+        }
+
+        .tracking-form button {
+            padding: 13px 20px;
+            border: none;
+            border-radius: 8px;
+            background: #1e3a8a;
+            color: #ffffff;
+            font-weight: 700;
+            cursor: pointer;
+        }
+
+        .tracking-result {
+            max-width: 900px;
+            margin: 0 auto;
+            background: #ffffff;
+            border: 1px solid #e5e7eb;
+            border-radius: 15px;
+            padding: 30px;
+            display: none;
+        }
+
+        .tracking-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 20px;
+            border-bottom: 1px solid #e5e7eb;
+            padding-bottom: 20px;
+            margin-bottom: 30px;
+        }
+
+        .tracking-header h2 {
+            color: #111827;
+            font-size: 20px;
+        }
+
+        .tracking-header p {
+            color: #6b7280;
+            font-size: 12px;
+            margin-top: 4px;
+        }
+
+        .status-badge {
+            background: #fef3c7;
+            color: #92400e;
+            padding: 7px 12px;
+            border-radius: 20px;
+            font-size: 11px;
+            font-weight: 700;
+        }
+
+        .tracking-timeline {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 10px;
+            position: relative;
+        }
+
+        .tracking-step {
+            text-align: center;
+            position: relative;
+        }
+
+        .tracking-step-icon {
+            width: 45px;
+            height: 45px;
+            margin: 0 auto 10px;
+            border-radius: 50%;
+            background: #e5e7eb;
+            color: #6b7280;
+            display: grid;
+            place-items: center;
+            font-size: 18px;
+            position: relative;
+            z-index: 2;
+        }
+
+        .tracking-step.active .tracking-step-icon {
+            background: #1e3a8a;
+            color: #ffffff;
+        }
+
+        .tracking-step.completed .tracking-step-icon {
+            background: #16a34a;
+            color: #ffffff;
+        }
+
+        .tracking-step strong {
+            display: block;
+            color: #111827;
+            font-size: 12px;
+        }
+
+        .tracking-step span {
+            display: block;
+            color: #9ca3af;
+            font-size: 10px;
+            margin-top: 4px;
+        }
+
+        .tracking-details {
+            margin-top: 35px;
+            padding-top: 25px;
+            border-top: 1px solid #e5e7eb;
+        }
+
+        .tracking-detail-row {
+            display: flex;
+            justify-content: space-between;
+            gap: 20px;
+            padding: 9px 0;
+            font-size: 13px;
+        }
+
+        .
