@@ -1,64 +1,45 @@
-from django_filters.rest_framework import DjangoFilterBackend
-from rest_framework import filters, permissions, viewsets
-from rest_framework.decorators import action
+from rest_framework import generics, permissions, viewsets
 from rest_framework.response import Response
+from rest_framework.views import APIView
 
-from core.permissions import IsProductOwnerSeller
-from .models import Category, Product, ProductImage, ProductVariant
-from .serializers import (
-    CategorySerializer, ProductDetailSerializer, ProductImageSerializer,
-    ProductListSerializer, ProductVariantSerializer, ProductWriteSerializer,
-)
+from .models import SellerProfile, Store
+from .serializers import SellerApplicationSerializer, SellerProfileSerializer, StoreSerializer
 
 
-class CategoryViewSet(viewsets.ReadOnlyModelViewSet):
-    queryset = Category.objects.filter(is_active=True, parent__isnull=True)
-    serializer_class = CategorySerializer
-    permission_classes = [permissions.AllowAny]
-    lookup_field = "slug"
+class BecomeSellerView(generics.CreateAPIView):
+    """Buyer applies to become a seller. Status starts as 'pending' for admin approval."""
+    serializer_class = SellerApplicationSerializer
+    permission_classes = [permissions.IsAuthenticated]
+
+    def perform_create(self, serializer):
+        serializer.save(user=self.request.user)
 
 
-class ProductViewSet(viewsets.ModelViewSet):
-    """
-    Public: list/retrieve published products only.
-    Sellers: full CRUD scoped to their own store's products.
-    """
-    permission_classes = [permissions.IsAuthenticatedOrReadOnly, IsProductOwnerSeller]
-    filter_backends = [DjangoFilterBackend, filters.SearchFilter, filters.OrderingFilter]
-    filterset_fields = ["category", "seller", "status"]
-    search_fields = ["name", "description", "sku"]
-    ordering_fields = ["price", "average_rating", "created_at"]
-    lookup_field = "slug"
+class MySellerProfileView(APIView):
+    permission_classes = [permissions.IsAuthenticated]
+
+    def get(self, request):
+        try:
+            profile = request.user.seller_profile
+        except SellerProfile.DoesNotExist:
+            return Response({"detail": "Not a seller yet."}, status=404)
+        return Response(SellerProfileSerializer(profile).data)
+
+
+class StoreViewSet(viewsets.ModelViewSet):
+    """Sellers manage their own store; public can read active stores."""
+    queryset = Store.objects.filter(is_active=True)
+    serializer_class = StoreSerializer
+
+    def get_permissions(self):
+        if self.action in ["list", "retrieve"]:
+            return [permissions.AllowAny()]
+        return [permissions.IsAuthenticated()]
 
     def get_queryset(self):
-        if self.action in ["list", "retrieve"] and not self._is_owner_request():
-            return Product.objects.filter(status=Product.Status.PUBLISHED)
-        if self.request.user.is_authenticated and hasattr(self.request.user, "seller_profile"):
-            return Product.objects.filter(seller__seller=self.request.user.seller_profile)
-        return Product.objects.filter(status=Product.Status.PUBLISHED)
+        if self.action in ["list", "retrieve"]:
+            return Store.objects.filter(is_active=True)
+        return Store.objects.filter(seller__user=self.request.user)
 
-    def _is_owner_request(self):
-        return self.request.query_params.get("mine") == "true"
-
-    def get_serializer_class(self):
-        if self.action == "list":
-            return ProductListSerializer
-        if self.action in ["create", "update", "partial_update"]:
-            return ProductWriteSerializer
-        return ProductDetailSerializer
-
-    @action(detail=True, methods=["post"], parser_classes=[])
-    def upload_image(self, request, slug=None):
-        product = self.get_object()
-        serializer = ProductImageSerializer(data=request.data)
-        serializer.is_valid(raise_exception=True)
-        serializer.save(product=product)
-        return Response(serializer.data, status=201)
-
-    @action(detail=True, methods=["post"])
-    def add_variant(self, request, slug=None):
-        product = self.get_object()
-        serializer = ProductVariantSerializer(data=request.data)
-        serializer.is_valid(raise_exception=True)
-        serializer.save(product=product)
-        return Response(serializer.data, status=201)
+    def perform_create(self, serializer):
+        serializer.save(seller=self.request.user.seller_profile)
