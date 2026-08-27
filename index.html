@@ -1,0 +1,583 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Bayzid - Shop, Sell & Earn</title>
+
+    <!-- Main CSS -->
+    <link rel="stylesheet" href="style.css">
+
+    <!-- Google Font -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
+        rel="stylesheet"
+    >
+</head>
+
+<body>
+
+    <!-- ================= HEADER ================= -->
+    <header class="header">
+        <div class="container header-wrapper">
+
+            <!-- Logo -->
+            <a href="index.html" class="logo">
+                <span class="logo-icon">B</span>
+                <span class="logo-text">Bayzid</span>
+            </a>
+
+            <!-- Search -->
+            <div class="search-box">
+                <input
+                    type="text"
+                    id="searchInput"
+                    placeholder="Search for products..."
+                >
+                <button type="button" onclick="searchProducts()">
+                    🔍
+                </button>
+            </div>
+
+            <!-- Navigation -->
+            <nav class="navigation">
+                <a href="index.html">Home</a>
+                <a href="products.html">Products</a>
+                <a href="seller.html">Sell</a>
+                <a href="affiliate.html">Earn</a>
+            </nav>
+
+            <!-- User Actions -->
+            <div class="header-actions">
+                <a href="cart.html" class="cart-button">
+                    🛒
+                    <span id="cartCount">0</span>
+                </a>
+
+                <a href="login.html" class="login-button">
+                    Login
+                </a>
+
+                <a href="register.html" class="register-button">
+                    Register
+                </a>
+            </div>
+
+        </div>
+    </header>
+
+
+    <!-- ================= HERO SECTION ================= -->
+    <section class="hero">
+        <div class="container hero-wrapper">
+
+            <div class="hero-content">
+
+                <span class="hero-badge">
+                    🚀 Bangladesh's New Marketplace
+                </span>
+
+                <h1>
+                    Shop, Sell & <span>Earn</span>
+                    With Bayzid
+                </h1>
+
+                <p>
+                    Discover amazing products, start selling online,
+                    and earn money with our affiliate program.
+                </p>
+
+                <div class="hero-buttons">
+                    <a href="products.html" class="primary-button">
+                        Shop Now
+                    </a>
+
+                    <a href="seller.html" class="secondary-button">
+                        Start Selling
+                    </a>
+                </div>
+
+            </div>
+
+            <div class="hero-image">
+                <div class="hero-card">
+                    <div class="hero-card-icon">🛍️</div>
+                    <h3>Everything You Need</h3>
+                    <p>Shop thousands of products at great prices.</p>
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+
+    <!-- ================= CATEGORIES ================= -->
+    <section class="categories-section">
+        <div class="container">
+
+            <div class="section-header">
+                <h2>Popular Categories</h2>
+                <a href="categories.html">View All →</a>
+            </div>
+
+            <div class="categories-grid">
+
+                <a href="products.html?category=electronics" class="category-card">
+                    <div class="category-icon">📱</div>
+                    <h3>Electronics</h3>
+                    <p>120+ Products</p>
+                </a>
+
+                <a href="products.html?category=fashion" class="category-card">
+                    <div class="category-icon">👕</div>
+                    <h3>Fashion</h3>
+                    <p>250+ Products</p>
+                </a>
+
+                <a href="products.html?category=watch" class="category-card">
+                    <div class="category-icon">⌚</div>
+                    <h3>Watches</h3>
+                    <p>80+ Products</p>
+                </a>
+
+                <a href="products.html?category=home" class="category-card">
+                    <div class="category-icon">🏠</div>
+                    <h3>Home & Kitchen</h3>
+                    <p>180+ Products</p>
+                </a>
+
+                <a href="products.html?category=beauty" class="category-card">
+                    <div class="category-icon">💄</div>
+                    <h3>Beauty</h3>
+                    <p>100+ Products</p>
+                </a>
+
+                <a href="products.html?category=sports" class="category-card">
+                    <div class="category-icon">⚽</div>
+                    <h3>Sports</h3>
+                    <p>70+ Products</p>
+                </a>
+
+            </div>
+
+        </div>
+    </section>
+
+
+    <!-- ================= FEATURED PRODUCTS ================= -->
+    <section class="products-section">
+        <div class="container">
+
+            <div class="section-header">
+                <div>
+                    <span class="section-label">TRENDING NOW</span>
+                    <h2>Featured Products</h2>
+                </div>
+
+                <a href="products.html">View All →</a>
+            </div>
+
+            <div class="products-grid" id="productGrid">
+
+                <!-- Product 01 -->
+                <div class="product-card">
+
+                    <div class="product-image">
+                        <span class="discount-badge">-20%</span>
+                        <img
+                            src="assets/images/product-1.jpg"
+                            alt="Smart Watch"
+                        >
+                    </div>
+
+                    <div class="product-info">
+
+                        <span class="product-category">
+                            Electronics
+                        </span>
+
+                        <h3>Premium Smart Watch</h3>
+
+                        <div class="rating">
+                            ⭐⭐⭐⭐⭐
+                            <span>(24)</span>
+                        </div>
+
+                        <div class="price">
+                            <strong>৳1,499</strong>
+                            <del>৳1,899</del>
+                        </div>
+
+                        <button
+                            class="add-cart-button"
+                            onclick="addToCart('Premium Smart Watch', 1499)"
+                        >
+                            Add to Cart
+                        </button>
+
+                    </div>
+                </div>
+
+
+                <!-- Product 02 -->
+                <div class="product-card">
+
+                    <div class="product-image">
+                        <span class="discount-badge">-15%</span>
+                        <img
+                            src="assets/images/product-2.jpg"
+                            alt="Wireless Earbuds"
+                        >
+                    </div>
+
+                    <div class="product-info">
+
+                        <span class="product-category">
+                            Electronics
+                        </span>
+
+                        <h3>Wireless Bluetooth Earbuds</h3>
+
+                        <div class="rating">
+                            ⭐⭐⭐⭐⭐
+                            <span>(18)</span>
+                        </div>
+
+                        <div class="price">
+                            <strong>৳899</strong>
+                            <del>৳1,050</del>
+                        </div>
+
+                        <button
+                            class="add-cart-button"
+                            onclick="addToCart('Wireless Bluetooth Earbuds', 899)"
+                        >
+                            Add to Cart
+                        </button>
+
+                    </div>
+                </div>
+
+
+                <!-- Product 03 -->
+                <div class="product-card">
+
+                    <div class="product-image">
+                        <span class="discount-badge">-25%</span>
+                        <img
+                            src="assets/images/product-3.jpg"
+                            alt="Men's Watch"
+                        >
+                    </div>
+
+                    <div class="product-info">
+
+                        <span class="product-category">
+                            Watches
+                        </span>
+
+                        <h3>Luxury Men's Watch</h3>
+
+                        <div class="rating">
+                            ⭐⭐⭐⭐☆
+                            <span>(31)</span>
+                        </div>
+
+                        <div class="price">
+                            <strong>৳1,199</strong>
+                            <del>৳1,599</del>
+                        </div>
+
+                        <button
+                            class="add-cart-button"
+                            onclick="addToCart('Luxury Men Watch', 1199)"
+                        >
+                            Add to Cart
+                        </button>
+
+                    </div>
+                </div>
+
+
+                <!-- Product 04 -->
+                <div class="product-card">
+
+                    <div class="product-image">
+                        <span class="discount-badge">-10%</span>
+                        <img
+                            src="assets/images/product-4.jpg"
+                            alt="Kitchen Product"
+                        >
+                    </div>
+
+                    <div class="product-info">
+
+                        <span class="product-category">
+                            Home & Kitchen
+                        </span>
+
+                        <h3>Multi-Purpose Kitchen Tool</h3>
+
+                        <div class="rating">
+                            ⭐⭐⭐⭐⭐
+                            <span>(42)</span>
+                        </div>
+
+                        <div class="price">
+                            <strong>৳499</strong>
+                            <del>৳550</del>
+                        </div>
+
+                        <button
+                            class="add-cart-button"
+                            onclick="addToCart('Multi-Purpose Kitchen Tool', 499)"
+                        >
+                            Add to Cart
+                        </button>
+
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+    </section>
+
+
+    <!-- ================= SELLER / AFFILIATE BANNER ================= -->
+    <section class="business-section">
+        <div class="container business-grid">
+
+            <div class="business-card seller-card">
+
+                <div class="business-icon">
+                    🏪
+                </div>
+
+                <div>
+                    <span>FOR SELLERS</span>
+
+                    <h2>
+                        Start Your Online Business
+                    </h2>
+
+                    <p>
+                        Create your seller account and start selling
+                        products to customers across Bangladesh.
+                    </p>
+
+                    <a href="seller.html">
+                        Become a Seller →
+                    </a>
+                </div>
+
+            </div>
+
+
+            <div class="business-card affiliate-card">
+
+                <div class="business-icon">
+                    💰
+                </div>
+
+                <div>
+                    <span>FOR AFFILIATES</span>
+
+                    <h2>
+                        Earn Money With Bayzid
+                    </h2>
+
+                    <p>
+                        Share products with your audience and earn
+                        commission from every successful sale.
+                    </p>
+
+                    <a href="affiliate.html">
+                        Join Affiliate Program →
+                    </a>
+                </div>
+
+            </div>
+
+        </div>
+    </section>
+
+
+    <!-- ================= WHY BAYZID ================= -->
+    <section class="why-section">
+        <div class="container">
+
+            <div class="section-header center">
+                <span class="section-label">WHY BAYZID?</span>
+                <h2>Everything in One Place</h2>
+                <p>
+                    A marketplace designed for buyers, sellers,
+                    and affiliates.
+                </p>
+            </div>
+
+
+            <div class="features-grid">
+
+                <div class="feature-card">
+                    <div class="feature-icon">🚚</div>
+                    <h3>Fast Delivery</h3>
+                    <p>
+                        Get your products delivered quickly
+                        across Bangladesh.
+                    </p>
+                </div>
+
+                <div class="feature-card">
+                    <div class="feature-icon">🔒</div>
+                    <h3>Secure Shopping</h3>
+                    <p>
+                        Shop confidently with secure payment
+                        and customer protection.
+                    </p>
+                </div>
+
+                <div class="feature-card">
+                    <div class="feature-icon">💳</div>
+                    <h3>Easy Payment</h3>
+                    <p>
+                        Convenient payment options for
+                        hassle-free shopping.
+                    </p>
+                </div>
+
+                <div class="feature-card">
+                    <div class="feature-icon">💰</div>
+                    <h3>Earn More</h3>
+                    <p>
+                        Sellers and affiliates can build
+                        their own online income.
+                    </p>
+                </div>
+
+            </div>
+
+        </div>
+    </section>
+
+
+    <!-- ================= NEWSLETTER ================= -->
+    <section class="newsletter-section">
+        <div class="container newsletter-wrapper">
+
+            <div>
+                <h2>Get the Latest Deals</h2>
+                <p>
+                    Subscribe to receive new products,
+                    offers and exclusive deals.
+                </p>
+            </div>
+
+            <form
+                class="newsletter-form"
+                onsubmit="subscribeNewsletter(event)"
+            >
+                <input
+                    type="email"
+                    id="newsletterEmail"
+                    placeholder="Enter your email address"
+                    required
+                >
+
+                <button type="submit">
+                    Subscribe
+                </button>
+            </form>
+
+        </div>
+    </section>
+
+
+    <!-- ================= FOOTER ================= -->
+    <footer class="footer">
+
+        <div class="container footer-grid">
+
+            <div class="footer-about">
+
+                <a href="index.html" class="logo footer-logo">
+                    <span class="logo-icon">B</span>
+                    <span class="logo-text">Bayzid</span>
+                </a>
+
+                <p>
+                    Shop, Sell & Earn with Bayzid —
+                    your modern online marketplace.
+                </p>
+
+                <div class="social-links">
+                    <a href="#" aria-label="Facebook">Facebook</a>
+                    <a href="#" aria-label="Instagram">Instagram</a>
+                    <a href="#" aria-label="YouTube">YouTube</a>
+                </div>
+
+            </div>
+
+
+            <div class="footer-column">
+
+                <h3>Marketplace</h3>
+
+                <a href="products.html">All Products</a>
+                <a href="categories.html">Categories</a>
+                <a href="deals.html">Deals</a>
+                <a href="new-arrivals.html">New Arrivals</a>
+
+            </div>
+
+
+            <div class="footer-column">
+
+                <h3>Business</h3>
+
+                <a href="seller.html">Become a Seller</a>
+                <a href="affiliate.html">Affiliate Program</a>
+                <a href="dropshipping.html">Dropshipping</a>
+                <a href="seller-login.html">Seller Login</a>
+
+            </div>
+
+
+            <div class="footer-column">
+
+                <h3>Support</h3>
+
+                <a href="contact.html">Contact Us</a>
+                <a href="help.html">Help Center</a>
+                <a href="shipping.html">Shipping Info</a>
+                <a href="returns.html">Returns & Refunds</a>
+
+            </div>
+
+        </div>
+
+
+        <div class="container footer-bottom">
+
+            <p>
+                © 2026 Bayzid. All rights reserved.
+            </p>
+
+            <div>
+                <a href="privacy.html">Privacy Policy</a>
+                <a href="terms.html">Terms & Conditions</a>
+            </div>
+
+        </div>
+
+    </footer>
+
+
+    <!-- Main JavaScript -->
+    <script src="script.js"></script>
+
+</body>
+                  </html>
